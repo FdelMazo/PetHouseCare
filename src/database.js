@@ -8,7 +8,6 @@ export const useDB = () => {
     autoload: true,
     verbose: true,
   })
-  const users = db.addCollection('users')
-  users.insert({ name: 'user', password: 'password' })
+  db.addCollection('users');
   return db
 };
