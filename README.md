@@ -5,6 +5,7 @@
 - Database: https://dexie.org/docs/
 
 ```zsh
-npm install # install deps
-npm start # open the website
+npm install        # install deps
+npx husky install  # install pre-commit
+npm start          # open the website
 ```
