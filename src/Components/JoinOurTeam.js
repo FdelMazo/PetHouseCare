@@ -17,6 +17,7 @@ import { db } from '../db';
 
 export const JoinOurTeam = () => {
     const navigate = useNavigate();
+    const [error, setError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -65,6 +66,15 @@ export const JoinOurTeam = () => {
                     </Stack>
                     <Box as={'form'} mt={10}>
                         <Stack spacing={4}>
+                            {error &&
+                                <Text
+                                    fontFamily={'heading'}
+                                    color="red"
+                                    fontSize="smaller"
+                                >
+                                    {error}
+                                </Text>
+                            }
                             <Input
                                 onChange={(event) => setUsername(event.target.value)}
                                 placeholder='Username'
@@ -90,10 +100,19 @@ export const JoinOurTeam = () => {
                         </Stack>
                         <Button
                             onClick={async () => {
-                              await db.users.add(
-                                  { name: username, password: password }
+                                if (!username) {
+                                    setError('Username cannot be empty')
+                                    return
+                                }
+                                if (!password) {
+                                    setError('Password cannot be empty')
+                                    return
+                                }
+                                setError('')
+                                await db.users.add(
+                                    { username: username, password: password }
                               )
-                              navigate('/login', { relative: 'path' });
+                                navigate('/home', { relative: 'path' });
                             }}
                             fontFamily={'heading'}
                             mt={8}
@@ -105,6 +124,36 @@ export const JoinOurTeam = () => {
                                 boxShadow: 'xl',
                             }}>
                             Join now
+                        </Button>
+                        <Button
+                            onClick={async () => {
+                                if (!username) {
+                                    setError('Username cannot be empty')
+                                    return
+                                }
+                                if (!password) {
+                                    setError('Password cannot be empty')
+                                    return
+                                }
+
+                                const u = await db.users.where('username').equals(username).first()
+                                if (!u) {
+                                    setError('Username not found')
+                                    return
+                                }
+                                if (u.password !== password) {
+                                    setError('Incorrect password')
+                                    return
+                                }
+                                setError('')
+                                navigate('/home', { relative: 'path' });
+                            }}
+                            fontFamily={'heading'}
+                            mt={2}
+                            colorScheme="gray"
+                            w={"20ch"}
+                        >
+                            Log in
                         </Button>
                     </Box>
                     form

@@ -4,11 +4,11 @@ import {
   Box,
   Grid,
   theme,
+  Text,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { JoinOurTeam } from './Components/JoinOurTeam.js'
 import { createHashRouter, RouterProvider } from 'react-router-dom';
-import { Login } from './Components/Login';
 import { CaretakerDetail } from './Components/CaretakerDetail';
 
 const router = createHashRouter([
@@ -17,8 +17,8 @@ const router = createHashRouter([
     element: <JoinOurTeam />
   },
   {
-    path: '/login',
-    element: <Login />
+    path: '/home',
+    element: <><Text>TODO: add home...</Text></>
   },
   {
     path: '/caretakers/:id',
