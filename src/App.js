@@ -7,11 +7,11 @@ import {
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { JoinOurTeam } from './Components/JoinOurTeam.js'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { Login } from './Components/Login';
 import { CaretakerDetail } from './Components/CaretakerDetail';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <JoinOurTeam />
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     path: '/caretakers/:id',
     element: <CaretakerDetail />
   }
-], {basename: "/PetHouseCare"})
+])
 
 function App() {
   return (
