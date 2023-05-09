@@ -8,18 +8,23 @@ import {
     Button,
     SimpleGrid,
     useBreakpointValue,
-    Icon,
+    Icon, Select,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { db } from '../db';
 
+const Roles = {
+    CUIDADOR: 'cuidador',
+    DUEÑO: 'dueño'
+};
 
 export const JoinOurTeam = () => {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
 
     return (
         <Box position={'relative'}>
@@ -97,6 +102,14 @@ export const JoinOurTeam = () => {
                                     color: 'gray.500',
                                 }}
                             />
+                            <Select
+                                placeholder={'Selecciona rol'}
+                                bg={'gray.100'}
+                                color={'gray.500'}
+                                onChange={(event) => setRole(event.target.value)}>
+                                <option value={Roles.CUIDADOR}>CUIDADOR/A</option>
+                                <option value={Roles.DUEÑO}>DUEÑO/A</option>
+                            </Select>
                         </Stack>
                         <Button
                             onClick={async () => {
@@ -108,9 +121,13 @@ export const JoinOurTeam = () => {
                                     setError('Password cannot be empty')
                                     return
                                 }
+                                if (!role) {
+                                    setError('Role cannot be empty')
+                                    return
+                                }
                                 setError('')
                                 await db.users.add(
-                                    { username: username, password: password }
+                                    { username: username, password: password, role: role }
                               )
                                 navigate('/home', { relative: 'path' });
                             }}
