@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "=18.15"
+    "node": "=18"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.6.1",
