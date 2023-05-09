@@ -29,7 +29,7 @@ const router = createHashRouter([
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Box textAlign='center' fontSize='xl' background="#f2f2f2">
+      <Box textAlign='center' fontSize='xl'>
         <Grid minH='100vh' p={3}>
           <ColorModeSwitcher justifySelf='flex-end' />
           <RouterProvider router={router}/>

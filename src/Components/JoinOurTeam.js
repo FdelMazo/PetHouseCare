@@ -18,7 +18,6 @@ import { db } from '../db';
 export const JoinOurTeam = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     return (
@@ -33,14 +32,13 @@ export const JoinOurTeam = () => {
                     <Heading
                         lineHeight={1.1}
                         fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-                        Senior web designers{' '}
+                        The app that connects pet lovers all over the{' '}
                         <Text
                             as={'span'}
                             bgGradient='linear(to-r, red.400,pink.400)'
                             bgClip='text'>
-                            &
-                        </Text>{' '}
-                        Full-Stack Developers
+                            world
+                        </Text>
                     </Heading>
                     <Stack direction={'row'} spacing={4} align={'center'}>
                     </Stack>
@@ -56,7 +54,7 @@ export const JoinOurTeam = () => {
                             color={'gray.800'}
                             lineHeight={1.1}
                             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-                            Join our team
+                            Join PetHouseCare
                             <Text
                                 as={'span'}
                                 bgGradient='linear(to-r, red.400,pink.400)'
@@ -64,26 +62,12 @@ export const JoinOurTeam = () => {
                                 !
                             </Text>
                         </Heading>
-                        <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-                            We’re looking for amazing engineers just like you! Become a part
-                            of our rockstar engineering team and skyrocket your career!
-                        </Text>
                     </Stack>
                     <Box as={'form'} mt={10}>
                         <Stack spacing={4}>
                             <Input
                                 onChange={(event) => setUsername(event.target.value)}
-                                placeholder='Firstname'
-                                bg={'gray.100'}
-                                border={0}
-                                color={'gray.500'}
-                                _placeholder={{
-                                    color: 'gray.500',
-                                }}
-                            />
-                            <Input
-                                onChange={(event) => setEmail(event.target.value)}
-                                placeholder='firstname@lastname.io'
+                                placeholder='Username'
                                 bg={'gray.100'}
                                 border={0}
                                 color={'gray.500'}
@@ -107,7 +91,7 @@ export const JoinOurTeam = () => {
                         <Button
                             onClick={async () => {
                               await db.users.add(
-                                { name: username, password: password, email: email }
+                                  { name: username, password: password }
                               )
                               navigate('/login', { relative: 'path' });
                             }}
@@ -120,18 +104,12 @@ export const JoinOurTeam = () => {
                                 bgGradient: 'linear(to-r, red.400,pink.400)',
                                 boxShadow: 'xl',
                             }}>
-                            Submit
+                            Join now
                         </Button>
                     </Box>
                     form
                 </Stack>
             </Container>
-            <Blur
-                position={'absolute'}
-                top={-10}
-                left={-10}
-                style={{ filter: 'blur(70px)' }}
-            />
         </Box>
     );
 }
