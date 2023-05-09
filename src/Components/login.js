@@ -1,3 +1,4 @@
-export default function() {
-  return <h1>Hi</h1>
-}
+const Login = () =>
+  <h1>Hi</h1>;
+
+export default Login;
