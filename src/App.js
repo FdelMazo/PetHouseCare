@@ -6,35 +6,35 @@ import {
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import Register from './Components/register.js'
-import { useDB, DatabaseContext } from './database';
+import { JoinOurTeam } from './Components/JoinOurTeam.js'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './Components/login';
+import { Login } from './Components/Login';
+import { CaretakerDetail } from './Components/CaretakerDetail';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Register />
+    element: <JoinOurTeam />
   },
   {
     path: '/login',
     element: <Login />
+  },
+  {
+    path: '/caretakers/:id',
+    element: <CaretakerDetail />
   }
 ], {basename: "/PetHouseCare"})
 
 function App() {
-  const db = useDB();
-
   return (
     <ChakraProvider theme={theme}>
-      <DatabaseContext.Provider value={db}>
-        <Box textAlign='center' fontSize='xl'>
-          <Grid minH='100vh' p={3}>
-            <ColorModeSwitcher justifySelf='flex-end' />
-            <RouterProvider router={router}/>
-          </Grid>
-        </Box>
-      </DatabaseContext.Provider>
+      <Box textAlign='center' fontSize='xl' background="#f2f2f2">
+        <Grid minH='100vh' p={3}>
+          <ColorModeSwitcher justifySelf='flex-end' />
+          <RouterProvider router={router}/>
+        </Grid>
+      </Box>
     </ChakraProvider>
   );
 }

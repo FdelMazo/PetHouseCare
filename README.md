@@ -2,7 +2,7 @@
 
 - Component Library: https://chakra-ui.com/
 - Templates: https://chakra-templates.dev/
-- Database: https://techfort.github.io/LokiJS/
+- Database: https://dexie.org/docs/
 
 ```zsh
 npm install # install deps

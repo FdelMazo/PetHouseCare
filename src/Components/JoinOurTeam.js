@@ -11,17 +11,15 @@ import {
     Icon,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react';
-import { DatabaseContext } from '../database';
+import { useState } from 'react';
+import { db } from '../db';
 
 
-export default function JoinOurTeam() {
-
+export const JoinOurTeam = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const db = useContext(DatabaseContext);
 
     return (
         <Box position={'relative'}>
@@ -107,10 +105,11 @@ export default function JoinOurTeam() {
                             />
                         </Stack>
                         <Button
-                            onClick={() => {
-                                const users = db.getCollection("users")
-                                users.insert({ name: username, password: password, email: email })
-                                navigate('/login', { relative: 'path' });
+                            onClick={async () => {
+                              await db.users.add(
+                                { name: username, password: password, email: email }
+                              )
+                              navigate('/login', { relative: 'path' });
                             }}
                             fontFamily={'heading'}
                             mt={8}
