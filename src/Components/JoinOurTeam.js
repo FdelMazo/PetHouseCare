@@ -7,12 +7,15 @@ import {
     Input,
     Button,
     SimpleGrid,
-    useBreakpointValue,
-    Icon, Select,
+    ButtonGroup,
+    IconButton,
+    Tooltip,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { db } from '../db';
+import { IoIosPaw, IoIosHome } from "react-icons/io";
+import React from 'react';
 
 const Roles = {
     CUIDADOR: 'cuidador',
@@ -102,14 +105,43 @@ export const JoinOurTeam = () => {
                                     color: 'gray.500',
                                 }}
                             />
-                            <Select
-                                placeholder={'Selecciona rol'}
-                                bg={'gray.100'}
-                                color={'gray.500'}
-                                onChange={(event) => setRole(event.target.value)}>
-                                <option value={Roles.CUIDADOR}>CUIDADOR/A</option>
-                                <option value={Roles.DUEÑO}>DUEÑO/A</option>
-                            </Select>
+
+                            <ButtonGroup
+                                justifyContent={'center'}
+                                isAttached>
+                                <Tooltip
+                                    closeOnClick={false}
+                                    label={<Text textAlign={"center"}>I'm a home owner <br />with pets to take care of</Text>}
+                                    hasArrow
+                                    placement={'left'}
+                                >
+                                    <IconButton
+                                        {...(role === Roles.DUEÑO ? {
+                                            _hover: { bgGradient: 'linear(to-r, red.400,pink.400)' },
+                                            bgGradient: 'linear(to-r, red.400,pink.400)',
+                                        } : {})}
+                                        onClick={() => setRole(Roles.DUEÑO)}
+                                        icon={<IoIosHome />}
+                                        {...(!role && {
+                                            borderRight: '1px dashed lightslategray'
+                                        })}
+                                    />
+                                </Tooltip>
+                                <Tooltip
+                                    closeOnClick={false}
+                                    label={<Text textAlign={"center"}>I'm a world traveller <br />pet care taker</Text>}
+                                    hasArrow
+                                    placement={'right'}>
+                                    <IconButton
+                                        {...(role === Roles.CUIDADOR ? {
+                                            _hover: { bgGradient: 'linear(to-r, red.400,pink.400)' },
+                                            bgGradient: 'linear(to-r, red.400,pink.400)',
+                                        } : {})}
+                                        onClick={() => setRole(Roles.CUIDADOR)}
+                                        icon={<IoIosPaw />}
+                                    />
+                                </Tooltip>
+                            </ButtonGroup>
                         </Stack>
                         <Button
                             onClick={async () => {
@@ -132,7 +164,7 @@ export const JoinOurTeam = () => {
                                 navigate('/home', { relative: 'path' });
                             }}
                             fontFamily={'heading'}
-                            mt={8}
+                            mt={4}
                             w={'full'}
                             bgGradient='linear(to-r, red.400,pink.400)'
                             color={'white'}
@@ -177,26 +209,6 @@ export const JoinOurTeam = () => {
                 </Stack>
             </Container>
         </Box>
+
     );
 }
-
-export const Blur = (props) => {
-    return (
-        <Icon
-            width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
-            zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
-            height='560px'
-            viewBox='0 0 528 560'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-            {...props}>
-            <circle cx='71' cy='61' r='111' fill='#F56565' />
-            <circle cx='244' cy='106' r='139' fill='#ED64A6' />
-            <circle cy='291' r='139' fill='#ED64A6' />
-            <circle cx='80.5' cy='189.5' r='101.5' fill='#ED8936' />
-            <circle cx='196.5' cy='317.5' r='101.5' fill='#ECC94B' />
-            <circle cx='70.5' cy='458.5' r='101.5' fill='#48BB78' />
-            <circle cx='426.5' cy='-0.5' r='101.5' fill='#4299E1' />
-        </Icon>
-    );
-};
