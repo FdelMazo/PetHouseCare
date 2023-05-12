@@ -10,6 +10,7 @@ import {
     ButtonGroup,
     IconButton,
     Tooltip,
+    useColorModeValue,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -108,7 +109,9 @@ export const JoinOurTeam = () => {
 
                             <ButtonGroup
                                 justifyContent={'center'}
-                                isAttached>
+                                isAttached
+                                color={useColorModeValue('var(--chakra-colors-chakra-body-text)', 'gray.800')}
+                            >
                                 <Tooltip
                                     closeOnClick={false}
                                     label={<Text textAlign={"center"}>I'm a home owner <br />with pets to take care of</Text>}
@@ -201,6 +204,7 @@ export const JoinOurTeam = () => {
                             mt={2}
                             colorScheme="gray"
                             w={"20ch"}
+                            color={useColorModeValue('var(--chakra-colors-chakra-body-text)', 'gray.800')}
                         >
                             Log in
                         </Button>
