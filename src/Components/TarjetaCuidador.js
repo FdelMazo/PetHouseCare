@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Container, Flex, Heading, Image } from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Flex, Heading, Image } from '@chakra-ui/react';
 
 const TarjetaCuidador = ({cuidador}) => {
   return <Card width={"50%"} margin={"20px"}>
