@@ -1,15 +1,10 @@
 import React from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Grid,
-  theme,
-  Text,
-} from '@chakra-ui/react';
+import { Box, ChakraProvider, Grid, theme } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { JoinOurTeam } from './Components/JoinOurTeam.js'
+import { JoinOurTeam } from './Components/JoinOurTeam.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { CaretakerDetail } from './Components/CaretakerDetail';
+import { ListaCuidadores } from './Components/ListaCuidadores';
 
 const router = createHashRouter([
   {
@@ -18,7 +13,7 @@ const router = createHashRouter([
   },
   {
     path: '/home',
-    element: <><Text>TODO: add home...</Text></>
+    element: <ListaCuidadores />
   },
   {
     path: '/caretakers/:id',

@@ -18,7 +18,7 @@ import { db } from '../db';
 import { IoIosPaw, IoIosHome } from "react-icons/io";
 import React from 'react';
 
-const Roles = {
+export const Roles = {
     CUIDADOR: 'cuidador',
     DUEÑO: 'dueño'
 };
