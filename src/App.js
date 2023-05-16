@@ -5,6 +5,7 @@ import { JoinOurTeam } from './Components/JoinOurTeam.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { CaretakerDetail } from './Components/CaretakerDetail';
 import { ListaCuidadores } from './Components/ListaCuidadores';
+import ListaHogares from './Components/ListaHogares';
 
 const router = createHashRouter([
   {
@@ -18,6 +19,10 @@ const router = createHashRouter([
   {
     path: '/caretakers/:id',
     element: <CaretakerDetail />
+  },
+  {
+    path: '/listahogares',
+    element: <ListaHogares />
   }
 ])
 
