@@ -1,19 +1,4 @@
-
-import {
-    Box,
-    Stack,
-    Heading,
-    Text,
-    Container,
-    Input,
-    Button,
-    SimpleGrid,
-    useBreakpointValue,
-    Icon,
-} from '@chakra-ui/react';
-
-import { Select, Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
-import { Grid, GridItem } from '@chakra-ui/react'
+import { Select, Table, Text, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { db } from '../db';
 import { Roles } from './JoinOurTeam';
@@ -52,7 +37,6 @@ const CUIDADOR1 = {
 export default function ListaHogares() {
 
   const [dueños, setDueños] = useState([]);
-  const [hogares, setHogares] = useState([]);
 
   useEffect(()=> {
 
