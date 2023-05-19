@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { db } from '../db';
 import { IoIosPaw, IoIosHome } from "react-icons/io";
 import React from 'react';
+import { ROUTES, useUser } from '../App';
 
 export const Roles = {
     CUIDADOR: 'cuidador',
@@ -29,6 +30,61 @@ export const JoinOurTeam = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('');
+    const {setUser} = useUser();
+
+    async function register() {
+        if (!username) {
+            setError('Username cannot be empty');
+            return;
+        }
+        if (!password) {
+            setError('Password cannot be empty');
+            return;
+        }
+        if (!role) {
+            setError('Role cannot be empty');
+            return;
+        }
+        setError('');
+        await db.users.add(
+            { username: username, password: password, role: role },
+        );
+        const u = await db.users.where('username').equals(username).first();
+        setUser(u);
+        if (u.role === Roles.DUEÑO) {
+            navigate(ROUTES.OWNER_HOME, { relative: 'path' });
+        } else {
+            navigate(ROUTES.CARETAKER_HOME, { relative: 'path' });
+        }
+    }
+
+    async function login() {
+        if (!username) {
+            setError('Username cannot be empty');
+            return;
+        }
+        if (!password) {
+            setError('Password cannot be empty');
+            return;
+        }
+
+        const u = await db.users.where('username').equals(username).first();
+        if (!u) {
+            setError('Username not found');
+            return;
+        }
+        if (u.password !== password) {
+            setError('Incorrect password');
+            return;
+        }
+        setError('');
+        setUser(u);
+        if (u.role === Roles.DUEÑO) {
+            navigate(ROUTES.OWNER_HOME, { relative: 'path' });
+        } else {
+            navigate(ROUTES.CARETAKER_HOME, { relative: 'path' });
+        }
+    }
 
     return (
         <Box position={'relative'}>
@@ -146,25 +202,10 @@ export const JoinOurTeam = () => {
                                 </Tooltip>
                             </ButtonGroup>
                         </Stack>
+
                         <Button
                             onClick={async () => {
-                                if (!username) {
-                                    setError('Username cannot be empty')
-                                    return
-                                }
-                                if (!password) {
-                                    setError('Password cannot be empty')
-                                    return
-                                }
-                                if (!role) {
-                                    setError('Role cannot be empty')
-                                    return
-                                }
-                                setError('')
-                                await db.users.add(
-                                    { username: username, password: password, role: role }
-                              )
-                                navigate('/home', { relative: 'path' });
+                                await register();
                             }}
                             fontFamily={'heading'}
                             mt={4}
@@ -179,26 +220,7 @@ export const JoinOurTeam = () => {
                         </Button>
                         <Button
                             onClick={async () => {
-                                if (!username) {
-                                    setError('Username cannot be empty')
-                                    return
-                                }
-                                if (!password) {
-                                    setError('Password cannot be empty')
-                                    return
-                                }
-
-                                const u = await db.users.where('username').equals(username).first()
-                                if (!u) {
-                                    setError('Username not found')
-                                    return
-                                }
-                                if (u.password !== password) {
-                                    setError('Incorrect password')
-                                    return
-                                }
-                                setError('')
-                                navigate('/home', { relative: 'path' });
+                                await login();
                             }}
                             fontFamily={'heading'}
                             mt={2}

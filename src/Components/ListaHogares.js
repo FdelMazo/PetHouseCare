@@ -1,7 +1,9 @@
-import { Select, Table, Text, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import { Select, Table, Text, Tbody, Th, Thead, Tr, Button, Box, Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { db } from '../db';
 import { Roles } from './JoinOurTeam';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../App';
 
 const DUEÑO1 = {
     username: 'Nelson',
@@ -35,7 +37,7 @@ const CUIDADOR1 = {
   };
 
 export default function ListaHogares() {
-
+    const navigate = useNavigate();
   const [dueños, setDueños] = useState([]);
 
   useEffect(()=> {
@@ -63,7 +65,12 @@ export default function ListaHogares() {
 
   return (
 
-    <div>
+    <Flex style={{height: "90vh" }} flexDir="column">
+        <Button alignSelf={"start"} onClick={() => navigate(ROUTES.CARETAKER_PROFILE, {relative: 'path'})}>Edit Profile</Button>
+
+        <Box height={"10rem"}/>
+
+
         <Select placeholder='Pais' size='md'>
             <option value='opt1'>Argentina</option>
         </Select>
@@ -104,6 +111,6 @@ export default function ListaHogares() {
                 ))}
             </Tbody>    
         </Table>
-    </div>
+    </Flex>
   );
 }
