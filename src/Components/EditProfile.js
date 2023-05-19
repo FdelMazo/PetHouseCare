@@ -54,7 +54,7 @@ EditableField.propTypes = {
     onChange: PropTypes.func,
 };
 
-export function EditCaretakerProfile() {
+export function EditProfile() {
     const { user: realUser, save, setUser: setRealUser } = useUser();
     const [user, setUser] = useState(realUser);
     const navigate = useNavigate();
@@ -63,11 +63,11 @@ export function EditCaretakerProfile() {
     return <Flex backgroundColor={'gray.50'} justifyContent='center' padding='10'>
         <Card width='80%' padding='5'>
             <Flex flexDir='column' alignItems='center' gap='7'>
-                <EditableField name='Username' value={user.username} onChange={(username) => setUser({...user, username})} />
-                <EditableField name='Email' value={user.email} onChange={(email) => setUser({...user, email})}/>
-                <EditableField name='Phone' value={user.phone} onChange={(phone) => setUser({...user, phone})}/>
-                <EditableAreaField name='Pets that I took care of' value={user.petsCared} onChange={(petsCared) => setUser({...user, petsCared})}/>
-                <EditableAreaField name='More info about me' value={user.moreInfo} onChange={(moreInfo) => setUser({...user, moreInfo})}/>
+                <EditableField name='Username' value={user.username} onChange={(username) => setUser({ ...user, username })} />
+                <EditableField name='Email' value={user.email} onChange={(email) => setUser({ ...user, email })} />
+                <EditableField name='Phone' value={user.phone} onChange={(phone) => setUser({ ...user, phone })} />
+                <EditableAreaField name='Pets that I took care of' value={user.petsCared} onChange={(petsCared) => setUser({ ...user, petsCared })} />
+                <EditableAreaField name='More info about me' value={user.moreInfo} onChange={(moreInfo) => setUser({ ...user, moreInfo })} />
                 <Card bgGradient='linear(to-r, red.400,pink.400)'>
                     <Flex alignItems='start' justifyContent='space-between' flexDir='column' minW='50%' height='100%' marginX='10' marginY='7'>
                         <Text color='white' fontWeight='bold' marginBottom='4'>
@@ -78,7 +78,7 @@ export function EditCaretakerProfile() {
                             <Text>
                                 Location:
                             </Text>
-                            <Editable defaultValue={user.nextTrip?.location} width='md' backgroundColor='gray.50' borderRadius='7px' margin='4' overflow='visible' onChange={(location) => setUser({...user, nextTrip: {...user.nexTrip, location}})}>
+                            <Editable defaultValue={user.nextTrip?.location} width='md' backgroundColor='gray.50' borderRadius='7px' margin='4' overflow='visible' onChange={(location) => setUser({ ...user, nextTrip: { ...user.nexTrip, location } })}>
                                 <EditablePreview minW='100%' display='block' minH='10' />
                                 <EditableInput />
                             </Editable>
@@ -95,7 +95,7 @@ export function EditCaretakerProfile() {
                             <Text>
                                 End Date:
                             </Text>
-                            <DatePicker selected={user.nextTrip?.endDate} onChange={(endDate) => setUser({...user, nextTrip: {...(user.nextTrip), endDate}})} />
+                            <DatePicker selected={user.nextTrip?.endDate} onChange={(endDate) => setUser({ ...user, nextTrip: { ...(user.nextTrip), endDate } })} />
                         </Flex>
                     </Flex>
                 </Card>
@@ -103,7 +103,7 @@ export function EditCaretakerProfile() {
                 <Button backgroundColor='pink.400' color={'white'} onClick={() => {
                     setRealUser(user);
                     save(user);
-                    navigate(ROUTES.CARETAKER_HOME);
+                    navigate(ROUTES.HOMEOWNERS);
                 }}>Save</Button>
             </Flex>
         </Card>

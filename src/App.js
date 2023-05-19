@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Box, ChakraProvider, Grid, theme } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { ChakraProvider, Grid, theme } from '@chakra-ui/react';
 import { JoinOurTeam } from './Components/JoinOurTeam.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { CaretakerDetail } from './Components/CaretakerDetail';
 import { ListaCuidadores } from './Components/ListaCuidadores';
 import ListaHogares from './Components/ListaHogares';
-import { EditCaretakerProfile } from './Components/EditCaretakerProfile';
+import { EditProfile } from './Components/EditProfile';
 import { UserContext } from './UserContext';
 import { ROUTES } from './routes';
 
@@ -16,7 +15,7 @@ const router = createHashRouter([
     element: <JoinOurTeam />
   },
   {
-    path: ROUTES.OWNER_HOME,
+    path: ROUTES.CARETAKERS,
     element: <ListaCuidadores />
   },
   {
@@ -24,12 +23,12 @@ const router = createHashRouter([
     element: <CaretakerDetail />
   },
   {
-    path: ROUTES.CARETAKER_HOME,
+    path: ROUTES.HOMEOWNERS,
     element: <ListaHogares />
   },
   {
-    path: ROUTES.CARETAKER_PROFILE,
-    element: <EditCaretakerProfile />
+    path: ROUTES.PROFILE,
+    element: <EditProfile />
   }
 ])
 
@@ -38,12 +37,9 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <UserContext.Provider value={{user, setUser}}>
-        <Box textAlign='center' fontSize='xl'>
-          <Grid minH='100vh' p={3}>
-            <ColorModeSwitcher justifySelf='flex-end' />
+        <Grid minH='100vh'>
             <RouterProvider router={router}/>
-          </Grid>
-        </Box>
+        </Grid>
       </UserContext.Provider>
     </ChakraProvider>
   );

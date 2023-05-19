@@ -4,7 +4,7 @@ const TarjetaCuidador = ({cuidador}) => {
   return <Card width={"50%"} margin={"20px"}>
     <CardHeader>
       <Heading size='md'>
-        CUIDADOR
+        Caretaker
       </Heading>
     </CardHeader>
     <CardBody>
