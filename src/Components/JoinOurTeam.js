@@ -16,7 +16,8 @@ import { useState } from 'react';
 import { db } from '../db';
 import { IoIosPaw, IoIosHome } from "react-icons/io";
 import React from 'react';
-import { ROUTES, useUser } from '../App';
+import { useUser } from '../UserContext';
+import { ROUTES } from '../routes';
 
 export const Roles = {
     CUIDADOR: 'cuidador',

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../db';
 import { Roles } from './JoinOurTeam';
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../App';
+import { ROUTES } from '../routes';
 
 const DUEÑO1 = {
     username: 'Nelson',
@@ -23,15 +23,15 @@ const CUIDADOR1 = {
   const HOME1 = {
     id_user: '1',
     country: 'Argentina',
-    city: 'Buenos Aires', 
+    city: 'Buenos Aires',
     typeOfpet: 'Perros',
     calification: '5 Estrellas'
   };
-  
+
   const HOME2 = {
     id_user: '2',
     country: 'Argentina',
-    city: 'Santa Fe', 
+    city: 'Santa Fe',
     typeOfpet: 'Gatos',
     calification: '1 Estrella'
   };
@@ -61,7 +61,7 @@ export default function ListaHogares() {
     action();
 
   },[]);
-  
+
 
   return (
 
@@ -79,7 +79,7 @@ export default function ListaHogares() {
             <option value='opt1'>Buenos Aires</option>
             <option value='opt2'>Santa Fe</option>
         </Select>
-        
+
         <Select placeholder='Calificación' size='md'>
                 <option value='opt1'>1 estrella</option>
                 <option value='opt2'>5 estrellas</option>
@@ -99,7 +99,7 @@ export default function ListaHogares() {
                     <Th> Pais </Th>
                     <Th> Ciudad </Th>
                     <Th> Mascota </Th>
-                    <Th> Calificación </Th>    
+                    <Th> Calificación </Th>
                 </Tr>
             </Thead>
 
@@ -107,9 +107,9 @@ export default function ListaHogares() {
                 { dueños.map((dueño) => (
                 <Tr>
                     { dueño.username }
-                </Tr>    
+                </Tr>
                 ))}
-            </Tbody>    
+            </Tbody>
         </Table>
     </Flex>
   );

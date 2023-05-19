@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, ChakraProvider, Grid, theme } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { JoinOurTeam } from './Components/JoinOurTeam.js';
@@ -7,15 +7,8 @@ import { CaretakerDetail } from './Components/CaretakerDetail';
 import { ListaCuidadores } from './Components/ListaCuidadores';
 import ListaHogares from './Components/ListaHogares';
 import { EditCaretakerProfile } from './Components/EditCaretakerProfile';
-import { db } from './db';
-
-export const ROUTES = {
-  LOGIN: '/',
-  OWNER_HOME: '/owner-home',
-  CARETAKER: '/caretakers/:id',
-  CARETAKER_HOME: '/caretaker-home',
-  CARETAKER_PROFILE: '/caretaker_profile',
-}
+import { UserContext } from './UserContext';
+import { ROUTES } from './routes';
 
 const router = createHashRouter([
   {
@@ -39,16 +32,6 @@ const router = createHashRouter([
     element: <EditCaretakerProfile />
   }
 ])
-
-const UserContext = React.createContext(null);
-
-export const useUser = () => {
-  const {user, setUser} = useContext(UserContext);
-  const save = (user) => {
-    db.users.put(user)
-  }
-  return {user, setUser, save}
-}
 
 function App() {
   const [user, setUser] = useState(null);

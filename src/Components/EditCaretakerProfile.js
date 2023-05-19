@@ -9,7 +9,8 @@ import {
     Flex,
     Text,
 } from '@chakra-ui/react';
-import { ROUTES, useUser } from '../App';
+import { ROUTES } from '../routes';
+import { useUser } from '../UserContext';
 import * as PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
