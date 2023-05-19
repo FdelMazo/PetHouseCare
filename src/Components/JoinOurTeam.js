@@ -13,17 +13,12 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { db } from '../db';
+import { db, ROLES } from '../db';
 import { IoIosPaw, IoIosHome } from "react-icons/io";
 import React from 'react';
 import { useUser } from '../UserContext';
 import { ROUTES } from '../routes';
 import { Navbar } from './Navbar';
-
-export const Roles = {
-    CUIDADOR: 'cuidador',
-    DUEÑO: 'dueño'
-};
 
 export const JoinOurTeam = () => {
     const navigate = useNavigate();
@@ -47,7 +42,7 @@ export const JoinOurTeam = () => {
         );
         const u = await db.users.where('username').equals(username).first();
         setUser(u);
-        if (u.role === Roles.DUEÑO) {
+        if (u.role === ROLES.DUEÑO) {
             navigate(ROUTES.CARETAKERS, { relative: 'path' });
         } else {
             navigate(ROUTES.HOMEOWNERS, { relative: 'path' });
@@ -75,7 +70,7 @@ export const JoinOurTeam = () => {
         }
         setError('');
         setUser(u);
-        if (u.role === Roles.DUEÑO) {
+        if (u.role === ROLES.DUEÑO) {
             navigate(ROUTES.CARETAKERS, { relative: 'path' });
         } else {
             navigate(ROUTES.HOMEOWNERS, { relative: 'path' });
@@ -179,7 +174,7 @@ export const JoinOurTeam = () => {
                                     >
                                         <Button
                                             onClick={async () => {
-                                                await register(Roles.DUEÑO);
+                                                await register(ROLES.DUEÑO);
                                             }}
                                             _hover={{
                                                 bgGradient: 'linear(to-r, red.400,pink.400)',
@@ -198,7 +193,7 @@ export const JoinOurTeam = () => {
                                         placement={'top'}>
                                         <Button
                                             onClick={async () => {
-                                                await register(Roles.CUIDADOR);
+                                                await register(ROLES.CUIDADOR);
                                             }}
                                             _hover={{
                                                 bgGradient: 'linear(to-r, red.400,pink.400)',

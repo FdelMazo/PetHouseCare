@@ -8,21 +8,26 @@ db.version(3).stores({
   homes:'++id,id_user, country, city, typeOfpet, calification'
 });
 
+export const ROLES = {
+  CUIDADOR: 'cuidador',
+  DUEÑO: 'dueño'
+};
+
 const FIXTURES = {
   homeowners: [
     {
       username: 'Nelson',
-      rol: 'DUEÑO'
+      role: ROLES.DUEÑO
     },
     {
       username: 'Cristian',
-      rol: 'DUEÑO'
+      role: ROLES.DUEÑO
     }
   ],
   caretakers: [
     {
       username: 'Sergio',
-      rol: 'CUIDADOR'
+      role: ROLES.CUIDADOR
     },
   ],
   homes: [

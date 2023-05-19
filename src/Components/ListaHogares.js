@@ -1,7 +1,6 @@
 import { Select, Table, Text, Tbody, Th, Thead, Tr, Button, Box, Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { db } from '../db';
-import { Roles } from './JoinOurTeam';
+import { db, ROLES } from '../db';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../routes';
 
@@ -12,7 +11,7 @@ export default function ListaHogares() {
 
   useEffect(() => {
     const action = async () => {
-        setDueños(await db.users.where('role').equals(Roles.DUEÑO).toArray());
+      setDueños(await db.users.where('role').equals(ROLES.DUEÑO).toArray());
       }
     action();
 

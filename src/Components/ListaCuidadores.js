@@ -1,15 +1,14 @@
 import TarjetaCuidador from './TarjetaCuidador';
 import { Box, Container } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { db } from '../db';
-import { Roles } from './JoinOurTeam';
+import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
 
 export function ListaCuidadores() {
   const [cuidadores, setCuidadores] = useState([]);
   useEffect(() => {
     const action = async () => {
-      setCuidadores(await db.users.where('role').equals(Roles.CUIDADOR).toArray());
+      setCuidadores(await db.users.where('role').equals(ROLES.CUIDADOR).toArray());
     }
     action();
   }, []);
