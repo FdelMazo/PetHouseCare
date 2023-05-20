@@ -1,0 +1,20 @@
+.lista-cuidadores::-webkit-scrollbar {
+    display: none;
+}
+
+.lista-cuidadores {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    height: 90vh;
+    background-color: #F5F5F5;
+    overflow: auto;
+}
+
+.datePicker {
+    color: black;
+    border-radius: 4px;
+    background-color: white;
+    text-align: center;
+}

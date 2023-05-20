@@ -26,6 +26,7 @@ export const JoinOurTeam = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const { setUser } = useUser();
+    setUser(null)
 
     async function register(role) {
         if (!username) {
@@ -34,6 +35,10 @@ export const JoinOurTeam = () => {
         }
         if (!password) {
             setError('Password cannot be empty');
+            return;
+        }
+        if (await db.users.where('username').equals(username).first()) {
+            setError('Username already exists');
             return;
         }
         setError('');
@@ -89,7 +94,7 @@ export const JoinOurTeam = () => {
                     as={SimpleGrid}
                     maxW={'7xl'}
                     columns={{ base: 1, md: 2 }}
-                    spacing={{ base: 10, lg: 32 }}
+                    spacing={12}
                     py={{ base: 10, sm: 20, lg: 32 }}>
                     <Stack
                         spacing={{ base: 10, md: 20 }}

@@ -42,6 +42,7 @@ export const ColorModeSwitcher = props => {
 
 export const Navbar = ({ title }) => {
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
   const { user, setUser } = useUser();
   return (
     <Flex px={4} h={16} alignItems={'center'} justifyContent="space-between">
@@ -61,7 +62,7 @@ export const Navbar = ({ title }) => {
               <Avatar size="sm">
                 <AvatarBadge
                   as={user.role === ROLES.CUIDADOR ? IoIosPaw : IoIosHome}
-                  color="black"
+                  color={colorMode === 'light' ? 'black' : 'pink.500'}
                   boxSize={5}
                   border="none"
                 />

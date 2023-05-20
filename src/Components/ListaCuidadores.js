@@ -3,6 +3,7 @@ import { Box, Container } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
+import './styles.css'
 
 export function ListaCuidadores() {
   const [cuidadores, setCuidadores] = useState([]);
