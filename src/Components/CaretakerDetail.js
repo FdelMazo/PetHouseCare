@@ -51,7 +51,7 @@ export const CaretakerDetail = () => {
                         </Heading>
                         <Box paddingTop='2' flexDirection='row' display='flex'>
                           <Box flexShrink='0' marginRight='2' color='darkslategrey'>
-                            <span>{caretaker.nextTrip.from.toLocaleDateString('es-AR')} ➜ {caretaker.nextTrip.to.toLocaleDateString('es-AR')}</span>
+                            <span>{new Date(caretaker.nextTrip.from).toLocaleDateString('es-AR')} ➜ {new Date(caretaker.nextTrip.to).toLocaleDateString('es-AR')}</span>
                           </Box>
                           <Box flexBasis='0.7' flexGrow='1'>
                             {caretaker.nextTrip?.location}

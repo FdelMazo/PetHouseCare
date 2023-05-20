@@ -12,7 +12,7 @@ const TarjetaCuidador = ({cuidador}) => {
       </Heading>
       {cuidador.nextTrip &&
         <Text bgGradient='linear(to-r, red.400,pink.400)' bgClip='text'>
-          Will be in {cuidador.nextTrip.location} from {cuidador.nextTrip.from.toLocaleDateString('es-AR')} to {cuidador.nextTrip.to.toLocaleDateString('es-AR')}
+          Will be in {cuidador.nextTrip.location} from {new Date(cuidador.nextTrip.from).toLocaleDateString('es-AR')} to {new Date(cuidador.nextTrip.to).toLocaleDateString('es-AR')}
         </Text>}
     </CardHeader>
     <CardBody>
