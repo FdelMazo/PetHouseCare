@@ -4,7 +4,7 @@ import { JoinOurTeam } from './Components/JoinOurTeam.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import { CaretakerDetail } from './Components/CaretakerDetail';
 import { ListaCuidadores } from './Components/ListaCuidadores';
-import ListaHogares from './Components/ListaHogares';
+import { ListaHogares } from './Components/ListaHogares';
 import { EditProfile } from './Components/EditProfile';
 import { UserContext } from './UserContext';
 import { ROUTES } from './routes';

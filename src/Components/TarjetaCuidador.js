@@ -19,14 +19,8 @@ const TarjetaCuidador = ({cuidador}) => {
       <Flex gap={'30px'}>
         <Image src={process.env.PUBLIC_URL + '/watcher.png'} boxSize="100px" objectFit='cover' alt={"Perro"}/>
         <Box>
-          <h1 style={{
-            textAlign: 'center',
-            verticalAlign: 'middle'
-          }}>
-            {cuidador.firstName} {cuidador.lastName}
-          </h1>
+          <Text>{cuidador.firstName} {cuidador.lastName}</Text>
           <Text>{cuidador.description}</Text>
-          <Text>{cuidador.petsCared}</Text>
         </Box>
       </Flex>
 

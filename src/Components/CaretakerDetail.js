@@ -39,9 +39,6 @@ export const CaretakerDetail = () => {
                     <Heading size='xs' mt={2} textTransform='uppercase'>
                       Pets cared for
                     </Heading>
-                    <Text paddingTop='2' fontSize='sm'>
-                      {caretaker.petsCared}
-                    </Text>
                   </Box>
                   {
                     caretaker.nextTrip &&

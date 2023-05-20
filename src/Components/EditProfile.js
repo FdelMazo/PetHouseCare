@@ -9,7 +9,6 @@ import {
     FormLabel,
     Input,
     Textarea,
-    FormHelperText,
     VStack,
     Container,
     useColorModeValue,
@@ -21,6 +20,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import './styles.css'
+import { ROLES } from '../db';
 
 export function EditProfile() {
     const navigate = useNavigate();
@@ -61,7 +61,6 @@ export function EditProfile() {
                         Email address
                     </FormLabel>
                     <Input defaultValue={user?.email} type="email" onChange={(e) => setUser({ ...user, email: e.target.value })} />
-                    <FormHelperText>We'll never share your email.</FormHelperText>
                 </FormControl>
                 <FormControl>
                     <FormLabel>
@@ -76,50 +75,72 @@ export function EditProfile() {
                     </FormLabel>
                     <Textarea defaultValue={user?.description} onChange={(e) => setUser({ ...user, description: e.target.value })} />
                 </FormControl>
-
-                <FormControl>
-                    <FormLabel>
-                        Pets I took care of
-                    </FormLabel>
-                    <Textarea defaultValue={user?.petsCared} onChange={(e) => setUser({ ...user, petsCared: e.target.value })} />
-                </FormControl>
             </VStack>
 
-            <Heading
-                mt={8}
-                size="lg"
-                bgGradient='linear(to-r, red.400,pink.400)'
-                bgClip='text'
-            >
-                My Next Trip
-            </Heading>
+            {user.role === ROLES.CUIDADOR && (
+                <>
+                    <Heading
+                        mt={8}
+                        size="lg"
+                        bgGradient='linear(to-r, red.400,pink.400)'
+                        bgClip='text'
+                    >
+                        My Next Trip
+                    </Heading>
 
-            <Card bgGradient='linear(to-r, red.400,pink.400)' p={4} m={2}>
-                <FormLabel color="white">
-                    Location
-                </FormLabel>
-                <Input bg="white" color="gray.800" defaultValue={user?.nextTrip?.location} onChange={(e) => setUser({ ...user, nextTrip: { ...user.nexTrip, location: e.target.value } })} />
-
-                <Flex m={8} gap={8}>
-                    <Box>
+                    <Card bgGradient='linear(to-r, red.400,pink.400)' p={4} m={2}>
                         <FormLabel color="white">
-                            From:
+                            Location
                         </FormLabel>
-                        <DatePicker className="datePicker" selected={user.nextTrip?.from} onChange={(from) => {
-                            setUser({ ...user, nextTrip: { ...(user.nextTrip), from } });
-                        }} />
-                    </Box>
+                        <Input bg="white" color="gray.800" defaultValue={user?.nextTrip?.location} onChange={(e) => setUser({ ...user, nextTrip: { ...user.nexTrip, location: e.target.value } })} />
 
-                    <Box>
+                        <Flex m={8} gap={8}>
+                            <Box>
+                                <FormLabel color="white">
+                                    From:
+                                </FormLabel>
+                                <DatePicker className="datePicker" selected={user.nextTrip?.from} onChange={(from) => {
+                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), from } });
+                                }} />
+                            </Box>
+
+                            <Box>
+                                <FormLabel color="white">
+                                    To:
+                                </FormLabel>
+                                <DatePicker className="datePicker" selected={user.nextTrip?.to} onChange={(to) => {
+                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), to } });
+                                }} />
+                            </Box>
+                        </Flex>
+                    </Card>
+                </>)}
+
+            {user.role === ROLES.DUEÑO && (
+                <>
+                    <Heading
+                        mt={8}
+                        size="lg"
+                        bgGradient='linear(to-r, red.400,pink.400)'
+                        bgClip='text'
+                    >
+                        My Home
+                    </Heading>
+
+                    <Card bgGradient='linear(to-r, red.400,pink.400)' p={4} m={2}>
                         <FormLabel color="white">
-                            To:
+                            Location
                         </FormLabel>
-                        <DatePicker className="datePicker" selected={user.nextTrip?.to} onChange={(to) => {
-                            setUser({ ...user, nextTrip: { ...(user.nextTrip), to } });
-                        }} />
-                    </Box>
-                </Flex>
-            </Card>
+                        <Input bg="white" color="gray.800" defaultValue={user?.home?.location} onChange={(e) => setUser({ ...user, home: { ...user.home, location: e.target.value } })} />
+
+                        <Box m={8}>
+                            <FormLabel color="white">
+                                My pets
+                            </FormLabel>
+                            <Input bg="white" color="gray.800" defaultValue={user?.home?.pets} onChange={(e) => setUser({ ...user, home: { ...user.home, pets: e.target.value } })} />
+                        </Box>
+                    </Card>
+                </>)}
 
             <Flex gap={4} mt={8} justifyContent="center" >
                 <Button
