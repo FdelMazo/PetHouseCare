@@ -4,7 +4,6 @@ export const db = new Dexie('pethousecare');
 window.__db = db;
 db.version(3).stores({
   users: '++id,username,role',
-  caretakers: 'id',
   homes:'++id,id_user, country, city, typeOfpet, calification'
 });
 
@@ -27,7 +26,14 @@ const FIXTURES = {
   caretakers: [
     {
       username: 'Sergio',
-      role: ROLES.CUIDADOR
+      role: ROLES.CUIDADOR,
+      firstName: "Sergio",
+      lastName: "M",
+      email: "sergio@example.com",
+      phone: "123",
+      description: "Me encanta cuidar todo tipo de perritos",
+      petsCared: "Cuide a charly y a sheen",
+      "nextTrip": { "location": "Argentina", "from": "2023-06-23T03: 00: 00.000Z", "to": "2023-06-27T03: 00: 00.000Z" }
     },
   ],
   homes: [
