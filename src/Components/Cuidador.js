@@ -1,4 +1,16 @@
-import { Box, Card, CardBody, CardHeader, Container, Heading, Stack, StackDivider, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Container,
+  Heading,
+  Input,
+  Stack,
+  StackDivider,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { db } from '../db';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,13 +20,45 @@ import { ROUTES } from '../routes';
 export const Cuidador = () => {
   let { id } = useParams();
   const [caretaker, setCaretaker] = useState(null);
+  const [avgRating, setAvgRating] = useState(0);
+  const [ratingCount, setRatingCount] = useState(0);
+  const [myRating, setMyRating] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [ratingFormErrorMessage, setRatingFormErrorMessage] = useState('');
 
   useEffect(() => {
     const action = async () => {
-      setCaretaker(await db.users.get(parseInt(id)));
+      const _caretaker = await db.users.get(parseInt(id));
+      setCaretaker(_caretaker);
+      const ratings = await db.caretakerRatings.where('caretakerId').equals(_caretaker.id).toArray();
+      const sum = ratings.reduce((a, b) => a.rating + b.rating, { rating: 0 });
+      const count = ratings.length;
+      const session = await db.session.toCollection().first();
+      setCurrentUserId(session.userId);
+      const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([_caretaker.id, session.userId]).first()
+      setMyRating(myRating ? myRating.rating : '');
+      setAvgRating(sum / count);
+      setRatingCount(count);
     }
     action();
-  }, [id]);
+  }, [id, myRating]);
+
+  const setRating = async (rating) => {
+    rating = Number(rating);
+    if (!rating || rating > 5 || rating < 1) {
+      setRatingFormErrorMessage('La reseña es un número del 1 al 5');
+      return;
+    }
+    const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([caretaker.id, currentUserId]).first();
+    if (myRating) {
+      myRating.rating = rating;
+      await db.caretakerRatings.put(myRating);
+    } else {
+      await db.caretakerRatings.put({caretakerId: caretaker.id, homeownerId: currentUserId, rating: rating});
+    }
+    setMyRating(rating);
+    setRatingFormErrorMessage('');
+  };
 
   return (
     <>
@@ -54,7 +98,18 @@ export const Cuidador = () => {
                             {caretaker.nextTrip?.location}
                           </Box>
                         </Box>
-                    </Box>}
+                    </Box>
+                  }
+                  <Box>
+                    <Text>{ratingCount > 0 ? `${ratingCount} reseñas. Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
+                    <br/>
+                    <Text>Mi puntuación (del 1 al 5):</Text>
+                    {myRating !== null && <Input type='number'
+                            defaultValue={myRating}
+                            onChange={(event) => setRating(event.target.value)}
+                    />}
+                    <Text color={'red'}>{ratingFormErrorMessage}</Text>
+                  </Box>
                 </Stack>
               </CardBody>
             </>
