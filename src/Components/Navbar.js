@@ -14,8 +14,8 @@ import {
   Icon,
   Text
 } from '@chakra-ui/react';
-import { ROUTES } from '../routes';
-import { useNavigate } from 'react-router-dom';
+import { CUIDADOR_ROUTES, DUEÑO_ROUTES, PUBLIC_ROUTES, ROUTE_TITLES, ROUTES } from '../routes';
+import { useNavigate, Link } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { IoIosHome, IoIosPaw, IoIosArrowBack } from 'react-icons/io';
 import { db, ROLES } from '../db';
@@ -41,25 +41,46 @@ export const ColorModeSwitcher = props => {
   );
 };
 
-
-export const Navbar = ({ backTo, title }) => {
+export const Navbar = ({ backTo, currentRoute }) => {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
 
   const [user, setUser] = useState(null);
+  const [routes, setRoutes] = useState(null);
   useEffect(() => {
     async function fetchUser () {
       const session = await db.session.toCollection().first();
-      setUser(session && (await db.users.where('id').equals(session.userId).first()));
+      const _user = session && (await db.users.where('id').equals(session.userId).first());
+      setUser(_user);
+      switch (_user && _user.role) {
+        case 'dueño':
+          setRoutes(DUEÑO_ROUTES)
+          break;
+        case 'cuidador':
+          setRoutes(CUIDADOR_ROUTES)
+          break;
+        default:
+          setRoutes(PUBLIC_ROUTES)
+      }
     }
     fetchUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return user ? (
     <Flex px={4} h={16} alignItems={'center'} justifyContent="space-between">
       <Heading fontSize={'2xl'} display="flex">
         {backTo && <Icon as={IoIosArrowBack} cursor="pointer" color="pink.500" onClick={() => navigate(backTo, { relative: 'path' })} mr={2} />}
-        {title}
+        {routes.map(route => {
+          const title = ROUTE_TITLES[route];
+          return (title && currentRoute &&
+            <Link
+              key={route}
+              to={route}
+              style={{ fontWeight: currentRoute === route ? 800 : 400, paddingRight: '10px' }}
+            >{title}</Link>
+          );
+        })}
       </Heading>
       <Flex>
         <ColorModeSwitcher px={4} />
@@ -83,16 +104,11 @@ export const Navbar = ({ backTo, title }) => {
             </MenuButton>
             <MenuList>
               <MenuItem
-                onClick={() => navigate(ROUTES.PROFILE, { relative: 'path' })}
-              >
-                Edit profile
-              </MenuItem>
-              <MenuItem
                 onClick={async () => {
                   await db.session.clear();
                   navigate(ROUTES.LOGIN, { relative: 'path' })
                 }}
-              >Log out</MenuItem>
+              >Cerrar Sesión</MenuItem>
             </MenuList>
           </Menu>
         }

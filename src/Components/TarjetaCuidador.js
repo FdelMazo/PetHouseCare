@@ -8,11 +8,11 @@ const TarjetaCuidador = ({cuidador}) => {
   }}>
     <CardHeader>
       <Heading size='md'>
-        Caretaker @{cuidador.username}
+        Cuidador/a @{cuidador.username}
       </Heading>
       {cuidador.nextTrip &&
         <Text bgGradient='linear(to-r, red.400,pink.400)' bgClip='text'>
-          Will be in {cuidador.nextTrip.location} from {new Date(cuidador.nextTrip.from).toLocaleDateString('es-AR')} to {new Date(cuidador.nextTrip.to).toLocaleDateString('es-AR')}
+          Viaja{cuidador.nextTrip.location ? ` a ${cuidador.nextTrip.location}` : ''} desde el {new Date(cuidador.nextTrip.from).toLocaleDateString('es-AR')} hasta el {new Date(cuidador.nextTrip.to).toLocaleDateString('es-AR')}
         </Text>}
     </CardHeader>
     <CardBody>

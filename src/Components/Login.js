@@ -19,7 +19,7 @@ import React from 'react';
 import { ROUTES } from '../routes';
 import { Navbar } from './Navbar';
 
-export const JoinOurTeam = () => {
+export const Login = () => {
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [username, setUsername] = useState('');
@@ -27,15 +27,15 @@ export const JoinOurTeam = () => {
 
     async function register(role) {
         if (!username) {
-            setError('Username cannot be empty');
+            setError('El usuario es obligatorio');
             return;
         }
         if (!password) {
-            setError('Password cannot be empty');
+            setError('La contraseña es obligatoria');
             return;
         }
         if (await db.users.where('username').equals(username).first()) {
-            setError('Username already exists');
+            setError('El usuario ya existe');
             return;
         }
         setError('');
@@ -54,21 +54,17 @@ export const JoinOurTeam = () => {
 
     async function login() {
         if (!username) {
-            setError('Username cannot be empty');
+            setError('El usuario es obligatorio');
             return;
         }
         if (!password) {
-            setError('Password cannot be empty');
+            setError('La contraseña es obligatoria');
             return;
         }
 
         const u = await db.users.where('username').equals(username).first();
-        if (!u) {
-            setError('Username not found');
-            return;
-        }
-        if (u.password !== password) {
-            setError('Incorrect password');
+        if (!u || u.password !== password) {
+            setError('Usuario o contraseña incorrectos');
             return;
         }
         setError('');
@@ -83,7 +79,7 @@ export const JoinOurTeam = () => {
 
     return (
         <>
-            <Navbar />
+            <Navbar currentRoute={ROUTES.LOGIN} />
             <Box
                 position={'relative'}
                 textAlign='center'
@@ -102,12 +98,12 @@ export const JoinOurTeam = () => {
                         <Heading
                             lineHeight={1.1}
                             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-                            The app that connects pet lovers all over the{' '}
+                            La aplicación que conecta fans de las mascotas en{' '}
                             <Text
                                 as={'span'}
                                 bgGradient='linear(to-r, red.400,pink.400)'
                                 bgClip='text'>
-                                world
+                                todo el mundo
                             </Text>
                         </Heading>
                     </Stack>
@@ -124,7 +120,7 @@ export const JoinOurTeam = () => {
                         <Heading
                             color={'gray.800'}
                             fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
-                            Join PetHouseCare
+                            Sumate a Pet House Care
                             <Text
                                 as={'span'}
                                 bgGradient='linear(to-r, red.400,pink.400)'
@@ -144,7 +140,7 @@ export const JoinOurTeam = () => {
                             <Stack spacing={4}>
                                 <Input
                                     onChange={(event) => setUsername(event.target.value)}
-                                    placeholder='Username'
+                                    placeholder='Usuario'
                                     bg={'gray.100'}
                                     border={0}
                                     color={'gray.500'}
@@ -154,7 +150,7 @@ export const JoinOurTeam = () => {
                                 />
                                 <Input
                                     onChange={(event) => setPassword(event.target.value)}
-                                    placeholder='Enter your password'
+                                    placeholder='Contraseña'
                                     type={'password'}
                                     bg={'gray.100'}
                                     border={0}
@@ -172,7 +168,7 @@ export const JoinOurTeam = () => {
                                 >
                                     <Tooltip
                                         closeOnClick={false}
-                                        label={<Text textAlign={"center"}>I'm a home owner <br />with pets to take care of</Text>}
+                                        label={<Text textAlign={"center"}>Soy dueño/a de hogar <br />con mascotas para cuidar</Text>}
                                         hasArrow
                                         placement={'top'}
                                     >
@@ -187,12 +183,12 @@ export const JoinOurTeam = () => {
                                             leftIcon={<IoIosHome />}
                                             borderRight='1px dashed lightslategray'
                                         >
-                                            <Text>Join as a homeowner</Text>
+                                            <Text>Registrar mi hogar</Text>
                                         </Button>
                                     </Tooltip>
                                     <Tooltip
                                         closeOnClick={false}
-                                        label={<Text textAlign={"center"}>I'm a world traveller <br />pet care taker</Text>}
+                                        label={<Text textAlign={"center"}>Soy un viajero/a <br />con ganas de cuidar mascotas</Text>}
                                         hasArrow
                                         placement={'top'}>
                                         <Button
@@ -206,7 +202,7 @@ export const JoinOurTeam = () => {
                                             borderLeft='1px dashed lightslategray'
                                             rightIcon={<IoIosPaw />}
                                         >
-                                            Join as a caretaker
+                                            Registrarme como cuidador/a
                                         </Button>
                                     </Tooltip>
                                 </ButtonGroup>
@@ -223,7 +219,7 @@ export const JoinOurTeam = () => {
                                 w={"20ch"}
                                 color={useColorModeValue('var(--chakra-colors-chakra-body-text)', 'gray.800')}
                             >
-                                Log in instead
+                                Iniciar Sesión
                             </Button>
                         </Box>
                     </Stack>

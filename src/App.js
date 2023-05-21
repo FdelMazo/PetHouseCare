@@ -1,11 +1,11 @@
 import React from 'react';
 import { ChakraProvider, Grid, theme } from '@chakra-ui/react';
-import { JoinOurTeam } from './Components/JoinOurTeam.js';
+import { Login } from './Components/Login.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
-import { CaretakerDetail } from './Components/CaretakerDetail';
+import { Cuidador } from './Components/Cuidador';
 import { ListaCuidadores } from './Components/ListaCuidadores';
 import { ListaHogares } from './Components/ListaHogares';
-import { EditProfile } from './Components/EditProfile';
+import { MiPerfil } from './Components/MiPerfil';
 import { Home } from './Components/Home';
 import { ROUTES } from './routes';
 
@@ -16,7 +16,7 @@ const router = createHashRouter([
   },
   {
     path: ROUTES.LOGIN,
-    element: <JoinOurTeam />
+    element: <Login />
   },
   {
     path: ROUTES.CARETAKERS,
@@ -24,7 +24,7 @@ const router = createHashRouter([
   },
   {
     path: ROUTES.CARETAKER,
-    element: <CaretakerDetail />
+    element: <Cuidador />
   },
   {
     path: ROUTES.HOMEOWNERS,
@@ -32,7 +32,7 @@ const router = createHashRouter([
   },
   {
     path: ROUTES.PROFILE,
-    element: <EditProfile />
+    element: <MiPerfil />
   }
 ])
 

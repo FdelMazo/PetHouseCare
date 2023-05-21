@@ -15,7 +15,7 @@ export const ROLES = {
 const FIXTURES = {
   homeowners: [
     {
-      username: 'Nelson',
+      username: 'nelson',
       role: ROLES.DUEÑO,
       firstName: "Nelson",
       lastName: "M",
@@ -27,7 +27,7 @@ const FIXTURES = {
   ],
   caretakers: [
     {
-      username: 'Sergio',
+      username: 'sergio',
       role: ROLES.CUIDADOR,
       firstName: "Sergio",
       lastName: "C",

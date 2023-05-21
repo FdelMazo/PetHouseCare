@@ -13,10 +13,10 @@ export const Home = () => {
       let route;
       switch (user && user.role) {
         case 'dueño':
-          route = ROUTES.CARETAKERS
+          route = user.email ? ROUTES.CARETAKERS : ROUTES.PROFILE
           break;
         case 'cuidador':
-          route = ROUTES.HOMEOWNERS
+          route = user.email ? ROUTES.HOMEOWNERS : ROUTES.PROFILE
           break;
         default:
           route = ROUTES.LOGIN

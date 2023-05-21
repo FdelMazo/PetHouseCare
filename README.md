@@ -1,4 +1,4 @@
-# PetHouseCare (FIUBA)
+# Pet House Care (FIUBA)
 
 - Component Library: https://chakra-ui.com/
 - Templates: https://chakra-templates.dev/

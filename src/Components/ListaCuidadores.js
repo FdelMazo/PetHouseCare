@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
 import './styles.css'
+import { ROUTES } from '../routes';
 
 export function ListaCuidadores() {
   const [cuidadores, setCuidadores] = useState([]);
@@ -16,7 +17,7 @@ export function ListaCuidadores() {
 
   return (
     <>
-      <Navbar title={"List of Caretakers"} />
+      <Navbar currentRoute={ROUTES.CARETAKERS} />
       <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent p={10} borderRadius={2} maxW="80ch" h="fit-content">
         {cuidadores.map((cuidador) => {
           return <TarjetaCuidador cuidador={cuidador} key={cuidador.username + cuidador.password} />

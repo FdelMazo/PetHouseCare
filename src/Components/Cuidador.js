@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
 
-export const CaretakerDetail = () => {
+export const Cuidador = () => {
   let { id } = useParams();
   const [caretaker, setCaretaker] = useState(null);
 
@@ -18,33 +18,33 @@ export const CaretakerDetail = () => {
 
   return (
     <>
-      <Navbar title={`@${caretaker?.username}`} backTo={ROUTES.CARETAKERS} />
+      <Navbar backTo={ROUTES.CARETAKERS} />
       <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent p={10} borderRadius={2} maxW="80ch" h="fit-content">
-        <Card>
+        <Card width={700}>
           {caretaker ? (
             <>
               <CardHeader>
                 <Heading size='lg'>{caretaker.firstName} {caretaker.lastName}</Heading>
-                <Text fontSize='sm' color='grey'>Caretaker</Text>
+                <Text fontSize='sm' color='grey'>Cuidador/a</Text>
               </CardHeader>
               <CardBody textAlign='left'>
                 <Stack divider={<StackDivider />} spacing='4'>
                   <Box>
                     <Heading size='xs' textTransform='uppercase'>
-                      Description
+                      Descripción
                     </Heading>
                     <Text paddingTop='2' fontSize='sm'>
                       {caretaker.description}
                     </Text>
                     <Heading size='xs' mt={2} textTransform='uppercase'>
-                      Pets cared for
+                      Mascotas cuidadas
                     </Heading>
                   </Box>
                   {
                     caretaker.nextTrip &&
                     <Box>
                       <Heading size='xs' textTransform='uppercase'>
-                          Next trip
+                          Próximo viaje
                         </Heading>
                         <Box paddingTop='2' flexDirection='row' display='flex'>
                           <Box flexShrink='0' marginRight='2' color='darkslategrey'>
@@ -59,7 +59,7 @@ export const CaretakerDetail = () => {
               </CardBody>
             </>
           ) : (
-            <Text>No se encontró cuidador/a</Text>
+            <Text padding={5}>No se encontró cuidador/a</Text>
           )
           }
         </Card>

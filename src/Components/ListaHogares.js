@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
 import './styles.css'
+import { ROUTES } from '../routes';
 
 export function ListaHogares() {
     const [homeowners, sethomeowners] = useState([]);
@@ -16,7 +17,7 @@ export function ListaHogares() {
 
   return (
       <>
-          <Navbar title={"List of Homes"} />
+          <Navbar currentRoute={ROUTES.HOMEOWNERS} />
           <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent p={10} borderRadius={2} maxW="80ch" h="fit-content">
               {homeowners.map((homeowner) => {
                   return <TarjetaHogar homeowner={homeowner} key={homeowner.username + homeowner.password} />

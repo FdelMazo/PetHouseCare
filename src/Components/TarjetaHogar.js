@@ -10,11 +10,11 @@ const TarjetaHogar = ({ homeowner }) => {
   >
     <CardHeader>
       <Heading size='md'>
-        Home of @{homeowner.username}
+        Hogar de @{homeowner.username}
       </Heading>
       {homeowner.home &&
         <Text bgGradient='linear(to-r, red.400,pink.400)' bgClip='text'>
-          Needs {homeowner.home.pets} to be taken care of in {homeowner.home.location}
+          {homeowner.home.pets} necesita/n cuidador/a en {homeowner.home.location}
         </Text>}
     </CardHeader>
     <CardBody>
