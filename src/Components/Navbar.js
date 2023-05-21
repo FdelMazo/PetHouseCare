@@ -12,13 +12,14 @@ import {
   MenuList,
   MenuItem,
   Icon,
+  Text
 } from '@chakra-ui/react';
 import { ROUTES } from '../routes';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../UserContext';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import { IoIosHome, IoIosPaw, IoIosArrowBack } from 'react-icons/io';
-import { ROLES } from '../db';
+import { db, ROLES } from '../db';
+import { useEffect, useState } from 'react';
 
 export const ColorModeSwitcher = props => {
   const { toggleColorMode } = useColorMode();
@@ -44,8 +45,17 @@ export const ColorModeSwitcher = props => {
 export const Navbar = ({ backTo, title }) => {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
-  const { user, setUser } = useUser();
-  return (
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    async function fetchUser () {
+      const session = await db.session.toCollection().first();
+      setUser(session && (await db.users.where('id').equals(session.userId).first()));
+    }
+    fetchUser();
+  }, []);
+
+  return user ? (
     <Flex px={4} h={16} alignItems={'center'} justifyContent="space-between">
       <Heading fontSize={'2xl'} display="flex">
         {backTo && <Icon as={IoIosArrowBack} cursor="pointer" color="pink.500" onClick={() => navigate(backTo, { relative: 'path' })} mr={2} />}
@@ -55,6 +65,7 @@ export const Navbar = ({ backTo, title }) => {
         <ColorModeSwitcher px={4} />
         {user &&
           <Menu>
+            <Text alignSelf='center' paddingRight='4px'>{`@${user?.username}`}</Text>
             <MenuButton
               as={Button}
               rounded={'full'}
@@ -77,8 +88,8 @@ export const Navbar = ({ backTo, title }) => {
                 Edit profile
               </MenuItem>
               <MenuItem
-                onClick={() => {
-                  setUser(null)
+                onClick={async () => {
+                  await db.session.clear();
                   navigate(ROUTES.LOGIN, { relative: 'path' })
                 }}
               >Log out</MenuItem>
@@ -87,5 +98,5 @@ export const Navbar = ({ backTo, title }) => {
         }
       </Flex>
     </Flex>
-  );
+  ) : <></>
 }

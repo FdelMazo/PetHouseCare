@@ -14,29 +14,34 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { ROUTES } from '../routes';
-import { useUser } from '../UserContext';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import './styles.css'
-import { ROLES } from '../db';
+import { db, ROLES } from '../db';
 
 export function EditProfile() {
     const navigate = useNavigate();
-    const { user: realUser, save, setUser: setRealUser } = useUser();
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
-        if (!realUser) {
-            navigate(ROUTES.LOGIN, { relative: 'path' });
+        async function fetchUser () {
+            const session = await db.session.toCollection().first();
+            const _user = await db.users.where('id').equals(session.userId).first();
+            if (!_user) {
+                navigate(ROUTES.LOGIN, { relative: 'path' });
+            }
+            setUser(_user);
         }
-    }, [navigate, realUser]);
+        fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    const bg = useColorModeValue("gray.100", "gray.700");
 
-    const [user, setUser] = useState(realUser || {});
-
-    return <>
+    return user ? (<>
         <Navbar title='Edit Profile' />
-        <Container bg={useColorModeValue("gray.100", "gray.700")} p={10} borderRadius={2} maxW="80ch" h="fit-content">
+        <Container bg={bg} p={10} borderRadius={2} maxW="80ch" h="fit-content">
             <Heading w="100%" textAlign={'center'} fontWeight="normal" mb={4}>
                 @{user?.username}
             </Heading>
@@ -145,15 +150,14 @@ export function EditProfile() {
             <Flex gap={4} mt={8} justifyContent="center" >
                 <Button
                     onClick={() => {
-                        navigate(ROUTES.HOMEOWNERS);
+                        navigate(-1);
                     }}
                 >
                     Back
                 </Button>
 
-                <Button colorScheme="red" onClick={() => {
-                    setRealUser(user);
-                    save(user);
+                <Button colorScheme="red" onClick={async () => {
+                    await db.users.put(user);
                     navigate(ROUTES.HOMEOWNERS);
                 }}
                 >
@@ -161,6 +165,5 @@ export function EditProfile() {
                 </Button>
             </Flex>
         </Container >
-    </>
-
+    </>) : <></>;
 }

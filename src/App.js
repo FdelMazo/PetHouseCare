@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ChakraProvider, Grid, theme } from '@chakra-ui/react';
 import { JoinOurTeam } from './Components/JoinOurTeam.js';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
@@ -6,10 +6,14 @@ import { CaretakerDetail } from './Components/CaretakerDetail';
 import { ListaCuidadores } from './Components/ListaCuidadores';
 import { ListaHogares } from './Components/ListaHogares';
 import { EditProfile } from './Components/EditProfile';
-import { UserContext } from './UserContext';
+import { Home } from './Components/Home';
 import { ROUTES } from './routes';
 
 const router = createHashRouter([
+  {
+    path: ROUTES.HOME,
+    element: <Home />
+  },
   {
     path: ROUTES.LOGIN,
     element: <JoinOurTeam />
@@ -33,14 +37,11 @@ const router = createHashRouter([
 ])
 
 function App() {
-  const [user, setUser] = useState(null);
   return (
     <ChakraProvider theme={theme}>
-      <UserContext.Provider value={{user, setUser}}>
-        <Grid minH='100vh'>
-            <RouterProvider router={router}/>
-        </Grid>
-      </UserContext.Provider>
+      <Grid minH='100vh'>
+          <RouterProvider router={router}/>
+      </Grid>
     </ChakraProvider>
   );
 }

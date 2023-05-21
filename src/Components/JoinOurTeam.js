@@ -16,7 +16,6 @@ import { useState } from 'react';
 import { db, ROLES } from '../db';
 import { IoIosPaw, IoIosHome } from "react-icons/io";
 import React from 'react';
-import { useUser } from '../UserContext';
 import { ROUTES } from '../routes';
 import { Navbar } from './Navbar';
 
@@ -25,8 +24,6 @@ export const JoinOurTeam = () => {
     const [error, setError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { setUser } = useUser();
-    setUser(null)
 
     async function register(role) {
         if (!username) {
@@ -46,7 +43,8 @@ export const JoinOurTeam = () => {
             { username: username, password: password, role: role },
         );
         const u = await db.users.where('username').equals(username).first();
-        setUser(u);
+        await db.session.clear();
+        await db.session.add({userId: u.id});
         if (u.role === ROLES.DUEÑO) {
             navigate(ROUTES.CARETAKERS, { relative: 'path' });
         } else {
@@ -74,7 +72,8 @@ export const JoinOurTeam = () => {
             return;
         }
         setError('');
-        setUser(u);
+        await db.session.clear();
+        await db.session.add({userId: u.id});
         if (u.role === ROLES.DUEÑO) {
             navigate(ROUTES.CARETAKERS, { relative: 'path' });
         } else {
