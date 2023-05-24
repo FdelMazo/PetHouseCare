@@ -2,11 +2,12 @@ import Dexie from 'dexie';
 
 export const db = new Dexie('pethousecare');
 window.__db = db;
-db.version(6).stores({
+db.version(9).stores({
   users: '++id,username,role',
   session: 'userId',
   caretakerRatings: '[caretakerId+homeownerId],rating',
   homeownerRatings: '[caretakerId+homeownerId],rating',
+  pakts: '[caretakerId+homeownerId]'
 });
 
 export const ROLES = {

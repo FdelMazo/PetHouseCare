@@ -8,6 +8,7 @@ import { ListaHogares } from './Components/ListaHogares';
 import { MiPerfil } from './Components/MiPerfil';
 import { Home } from './Components/Home';
 import { ROUTES } from './routes';
+import { Hogar } from './Components/Hogar';
 
 const router = createHashRouter([
   {
@@ -33,7 +34,11 @@ const router = createHashRouter([
   {
     path: ROUTES.PROFILE,
     element: <MiPerfil />
-  }
+  },
+  {
+    path: ROUTES.HOMEOWNER,
+    element: <Hogar />,
+  },
 ])
 
 function App() {

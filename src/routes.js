@@ -4,7 +4,7 @@ export const ROUTES = {
     HOMEOWNERS: '/homeowners',
     CARETAKERS: '/caretakers',
     CARETAKER: '/caretakers/:id',
-    // HOMEOWNER: '/homeowners/:id',
+    HOMEOWNER: '/homeowners/:id',
     PROFILE: '/profile',
 }
 
