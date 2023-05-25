@@ -9,6 +9,7 @@ import { MiPerfil } from './Components/MiPerfil';
 import { Home } from './Components/Home';
 import { ROUTES } from './routes';
 import { Hogar } from './Components/Hogar';
+import { MisPactos } from './MisPactos';
 
 const router = createHashRouter([
   {
@@ -39,6 +40,11 @@ const router = createHashRouter([
     path: ROUTES.HOMEOWNER,
     element: <Hogar />,
   },
+  {
+    path: ROUTES.MIS_PACTOS,
+    element: <MisPactos />,
+  },
+
 ])
 
 function App() {

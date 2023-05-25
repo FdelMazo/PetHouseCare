@@ -39,15 +39,6 @@ export function ListaHogares() {
     const findName = (pacto) => {
         return findHomeOwner(pacto).username;
     };
-
-    const findNumber = (pacto) => {
-        return findHomeOwner(pacto).phone;
-    };
-
-    const findEmail = (pacto) => {
-        return findHomeOwner(pacto).email;
-    };
-
     const searcher = (e) => {
         setSearch(e.target.value);
     };
@@ -55,17 +46,6 @@ export function ListaHogares() {
     return (
         <>
             <Navbar currentRoute={ROUTES.HOMEOWNERS} />
-            <Container bg={useColorModeValue('gray.100', 'gray.700')} centerContent marginBottom={'30px'} borderRadius={2} minW='75vw'
-                       maxW='75vw' fontWeight={'700'}>
-                <Heading>Pactos actuales</Heading>
-                {pactos.filter((pacto) => pacto.accepted).map((pacto) => {
-                    return <Flex flexDirection={'column'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'} minW={'40%'}>
-                        <Text>Nombre: {findName(pacto)}</Text>
-                        <Text>Numero: {findNumber(pacto)}</Text>
-                        <Text>Email: {findEmail(pacto)}</Text>
-                    </Flex>
-                })}
-            </Container>
             <Container bg={useColorModeValue('gray.100', 'gray.700')} centerContent p={10} borderRadius={2} minW='75vw'
                        maxW='75vw' h='fit-content'>
                 <Heading>Estos cuidadores quieren hacer un pacto contigo</Heading>

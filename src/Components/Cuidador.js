@@ -117,7 +117,9 @@ export const Cuidador = () => {
                         let storeName = {
                           homeownerId: user.id,
                           caretakerId: caretaker.id,
-                          accepted: false
+                          accepted: false,
+                          startDate: caretaker.nextTrip.from,
+                          endDate: caretaker.nextTrip.to,
                         };
                         await db.pakts.put(storeName)
                         navigate(ROUTES.CARETAKERS)
