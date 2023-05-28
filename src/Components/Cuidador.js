@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { db } from '../db';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
@@ -21,8 +21,10 @@ export const Cuidador = () => {
   let { id } = useParams();
   const [caretaker, setCaretaker] = useState(null);
   const [avgRating, setAvgRating] = useState(0);
+  const [ratings, setRatings] = useState([]);
   const [ratingCount, setRatingCount] = useState(0);
   const [myRating, setMyRating] = useState(null);
+  const [myTextEvaluation, setMyTextEvaluation] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [ratingFormErrorMessage, setRatingFormErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -46,17 +48,20 @@ export const Cuidador = () => {
       const _caretaker = await db.users.get(parseInt(id));
       setCaretaker(_caretaker);
       const ratings = await db.caretakerRatings.where('caretakerId').equals(_caretaker.id).toArray();
-      const sum = ratings.reduce((a, b) => a.rating + b.rating, { rating: 0 });
-      const count = ratings.length;
+      setRatings(ratings);
+      const ratingsWithNumber = ratings.filter(rating => rating.rating);
+      const sum = ratingsWithNumber.reduce((a, b) => a.rating + b.rating, { rating: 0 });
+      const count = ratingsWithNumber.length;
       const session = await db.session.toCollection().first();
       setCurrentUserId(session.userId);
       const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([_caretaker.id, session.userId]).first()
       setMyRating(myRating ? myRating.rating : '');
+      setMyTextEvaluation(myRating ? myRating.text : '');
       setAvgRating(sum / count);
       setRatingCount(count);
     }
     action();
-  }, [id, myRating]);
+  }, [id, myRating, myTextEvaluation]);
 
   const setRating = async (rating) => {
     rating = Number(rating);
@@ -74,6 +79,17 @@ export const Cuidador = () => {
     setMyRating(rating);
     setRatingFormErrorMessage('');
   };
+
+  const setTextEvaluation = async (text) => {
+    const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([caretaker.id, currentUserId]).first();
+    if (myRating) {
+      myRating.text = text;
+      await db.caretakerRatings.put(myRating);
+    } else {
+      await db.caretakerRatings.put({caretakerId: caretaker.id, homeownerId: currentUserId, text: text});
+    }
+    setMyTextEvaluation(text);
+  }
 
   return (
     <>
@@ -127,14 +143,33 @@ export const Cuidador = () => {
                     </Box>
                   }
                   <Box>
-                    <Text>{ratingCount > 0 ? `${ratingCount} reseñas. Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
-                    <br/>
                     <Text>Mi puntuación (del 1 al 5):</Text>
                     {myRating !== null && <Input type='number'
                             defaultValue={myRating}
                             onChange={(event) => setRating(event.target.value)}
                     />}
+                    <br/>
+                    <Text>Comentario sobre {caretaker.firstName}:</Text>
+                    <Input
+                      defaultValue={myTextEvaluation}
+                      placeholder="Comentario"
+                      onChange={(event) => setTextEvaluation(event.target.value)}
+                    />
                     <Text color={'red'}>{ratingFormErrorMessage}</Text>
+                  </Box>
+                  <Box>
+                    <Text>{ratingCount > 0 ? `${ratingCount} reseña(s). Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
+                    <br/>
+                    <Text>Comentarios:</Text>
+                    {ratings.map((rating) => (rating.text && rating.text.trim() && <Text
+                      border="solid 1px lightgrey"
+                      padding="5px"
+                      marginTop="5px"
+                      key={`${rating.caretakerId}${rating.homeownerId}`}
+                    >
+                      "{rating.text}"
+                    </Text>))}
+                    {!ratings.filter(rating => rating.text && rating.text.trim()).length && <Text>No hay comentarios</Text>}
                   </Box>
                 </Stack>
               </CardBody>

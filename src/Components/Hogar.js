@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react';
 import { db } from '../db';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
@@ -21,8 +21,10 @@ export const Hogar = () => {
   let { id } = useParams();
   const [homeOwner, setHomeOwner] = useState(null);
   const [avgRating, setAvgRating] = useState(0);
+  const [ratings, setRatings] = useState([]);
   const [ratingCount, setRatingCount] = useState(0);
   const [myRating, setMyRating] = useState(null);
+  const [myTextEvaluation, setMyTextEvaluation] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [ratingFormErrorMessage, setRatingFormErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -45,18 +47,21 @@ export const Hogar = () => {
     const action = async () => {
       const _homeOwner = await db.users.get(parseInt(id));
       setHomeOwner(_homeOwner);
-      const ratings = await db.caretakerRatings.where('caretakerId').equals(_homeOwner.id).toArray();
-      const sum = ratings.reduce((a, b) => a.rating + b.rating, { rating: 0 });
-      const count = ratings.length;
+      const ratings = await db.homeownerRatings.where('homeownerId').equals(_homeOwner.id).toArray();
+      setRatings(ratings);
+      const ratingsWithNumber = ratings.filter(rating => rating.rating);
+      const sum = ratingsWithNumber.reduce((a, b) => a.rating + b.rating, { rating: 0 });
+      const count = ratingsWithNumber.length;
       const session = await db.session.toCollection().first();
       setCurrentUserId(session.userId);
-      const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([_homeOwner.id, session.userId]).first()
+      const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([_homeOwner.id, session.userId]).first()
       setMyRating(myRating ? myRating.rating : '');
+      setMyTextEvaluation(myRating ? myRating.text : '');
       setAvgRating(sum / count);
       setRatingCount(count);
     }
     action();
-  }, [id, myRating]);
+  }, [id, myRating, myTextEvaluation]);
 
   const setRating = async (rating) => {
     rating = Number(rating);
@@ -64,16 +69,27 @@ export const Hogar = () => {
       setRatingFormErrorMessage('La reseña es un número del 1 al 5');
       return;
     }
-    const myRating = await db.caretakerRatings.where('[caretakerId+homeownerId]').equals([homeOwner.id, currentUserId]).first();
+    const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([homeOwner.id, currentUserId]).first();
     if (myRating) {
       myRating.rating = rating;
-      await db.caretakerRatings.put(myRating);
+      await db.homeownerRatings.put(myRating);
     } else {
-      await db.caretakerRatings.put({caretakerId: homeOwner.id, homeownerId: currentUserId, rating: rating});
+      await db.homeownerRatings.put({caretakerId: currentUserId, homeownerId: homeOwner.id, rating: rating});
     }
     setMyRating(rating);
     setRatingFormErrorMessage('');
   };
+
+  const setTextEvaluation = async (text) => {
+    const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([homeOwner.id, currentUserId]).first();
+    if (myRating) {
+      myRating.text = text;
+      await db.homeownerRatings.put(myRating);
+    } else {
+      await db.homeownerRatings.put({caretakerId: currentUserId, homeownerId: homeOwner.id, text: text});
+    }
+    setMyTextEvaluation(text);
+  }
 
   return (
     <>
@@ -124,8 +140,8 @@ export const Hogar = () => {
                         </Box>
                       <Button onClick={async () => {
                         let storeName = {
-                          homeownerId: user.id,
-                          caretakerId: homeOwner.id,
+                          homeownerId: homeOwner.id,
+                          caretakerId: user.id,
                           accepted: false
                         };
                         await db.pakts.put(storeName)
@@ -134,14 +150,33 @@ export const Hogar = () => {
                     </Box>
                   }
                   <Box>
-                    <Text>{ratingCount > 0 ? `${ratingCount} reseñas. Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
-                    <br/>
                     <Text>Mi puntuación (del 1 al 5):</Text>
                     {myRating !== null && <Input type='number'
                             defaultValue={myRating}
                             onChange={(event) => setRating(event.target.value)}
                     />}
+                    <br/>
+                    <Text>Comentario sobre {homeOwner.firstName}:</Text>
+                    <Input
+                      defaultValue={myTextEvaluation}
+                      placeholder="Comentario"
+                      onChange={(event) => setTextEvaluation(event.target.value)}
+                    />
                     <Text color={'red'}>{ratingFormErrorMessage}</Text>
+                  </Box>
+                  <Box>
+                    <Text>{ratingCount > 0 ? `${ratingCount} reseña(s). Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
+                    <br/>
+                    <Text>Comentarios:</Text>
+                    {ratings.map((rating) => (rating.text && rating.text.trim() && <Text
+                      border="solid 1px lightgrey"
+                      padding="5px"
+                      marginTop="5px"
+                      key={`${rating.caretakerId}${rating.homeownerId}`}
+                    >
+                      "{rating.text}"
+                    </Text>))}
+                    {!ratings.filter(rating => rating.text && rating.text.trim()).length && <Text>No hay comentarios</Text>}
                   </Box>
                 </Stack>
               </CardBody>
