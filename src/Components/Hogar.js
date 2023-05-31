@@ -147,6 +147,7 @@ export const Hogar = () => {
                             {homeOwner.nextTrip?.location}
                           </Box>
                         </Box>
+                        no te olvides fede de no habilitar el boton de pacto cuando ya tengo uno 
                       <Button onClick={async () => {
                         let storeName = {
                           homeownerId: homeOwner.id,

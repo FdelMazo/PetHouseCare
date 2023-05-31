@@ -9,7 +9,9 @@ import {
   Stack,
   StackDivider,
   Text,
+  Flex,
   useColorModeValue,
+  Icon,
 } from '@chakra-ui/react';
 import { db } from '../db';
 import React, { useEffect, useState } from 'react';
@@ -18,6 +20,8 @@ import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
 import ReactStars from 'react-stars';
 import { itsMyPact } from '../MisPactos';
+import { IoIosAirplane, IoIosArrowDroprightCircle, IoIosPaw } from 'react-icons/io';
+import { FaHandshake } from 'react-icons/fa';
 
 export const Cuidador = () => {
   let { id } = useParams();
@@ -107,7 +111,10 @@ export const Cuidador = () => {
           {caretaker ? (
             <>
               <CardHeader>
-                <Heading size='lg'>{caretaker.firstName} {caretaker.lastName}</Heading>
+                <Flex>
+                  <Icon as={IoIosPaw} boxSize={7} mr={1} />
+                  <Heading size='lg'>{caretaker.firstName} {caretaker.lastName}</Heading>
+                </Flex>
                 <Text fontSize='sm' color='grey'>Cuidador/a</Text>
               </CardHeader>
               <CardBody textAlign='left'>
@@ -127,17 +134,24 @@ export const Cuidador = () => {
                     caretaker.nextTrip &&
                     <Box>
                       <Heading size='xs' textTransform='uppercase'>
+                          <Icon as={IoIosAirplane} boxSize={3} mr={1} />
                           Próximo viaje
                         </Heading>
                         <Box paddingTop='2' flexDirection='row' display='flex'>
-                          <Box flexShrink='0' marginRight='2' color='darkslategrey'>
-                            <span>{new Date(caretaker.nextTrip.from).toLocaleDateString('es-AR')} ➜ {new Date(caretaker.nextTrip.to).toLocaleDateString('es-AR')}</span>
-                          </Box>
-                          <Box flexBasis='0.7' flexGrow='1'>
+                          <Box flexBasis='0.7' flexShrink='0' mr={2}>
                             {caretaker.nextTrip?.location}
                           </Box>
+                          <Box flexGrow='1' color='darkslategrey'>
+                            <span>
+                              {new Date(caretaker.nextTrip.from).toLocaleDateString('es-AR')}
+                              <Icon as={IoIosArrowDroprightCircle} boxSize={3} mx={1} />
+                              {new Date(caretaker.nextTrip.to).toLocaleDateString('es-AR')}
+                            </span>
+                          </Box>
                         </Box>
-                      <Button onClick={async () => {
+                        <Button
+                          leftIcon={<Icon as={FaHandshake} />}
+                          onClick={async () => {
                         let storeName = {
                           homeownerId: user.id,
                           caretakerId: caretaker.id,
@@ -171,17 +185,25 @@ export const Cuidador = () => {
                   </Box>}
                   <Box>
                     <Text>{ratingCount > 0 ? `${ratingCount} reseña(s). Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
-                    <br/>
-                    <Text>Comentarios:</Text>
-                    {ratings.map((rating) => (rating.text && rating.text.trim() && <Text
-                      border="solid 1px lightgrey"
-                      padding="5px"
-                      marginTop="5px"
-                      key={`${rating.caretakerId}${rating.homeownerId}`}
-                    >
-                      "{rating.text}"
-                    </Text>))}
-                    {!ratings.filter(rating => rating.text && rating.text.trim()).length && <Text>No hay comentarios</Text>}
+                    {ratings.filter(rating => rating.text && rating.text.trim()).length ?
+                      <>
+                        {ratings.map((rating) => (rating.text && rating.text.trim() &&
+                          <>
+                            <Text>Comentarios:</Text>
+
+                          <Text
+                            border="solid 1px lightgrey"
+                            padding="5px"
+                            marginTop="5px"
+                            key={`${rating.caretakerId}${rating.homeownerId}`}
+                          >
+                            "{rating.text}"
+                            </Text>
+                          </>))
+                        }
+                      </> :
+                      <Text>No hay comentarios</Text>
+                    }
                   </Box>
                 </Stack>
               </CardBody>

@@ -10,6 +10,7 @@ import {
     ButtonGroup,
     Tooltip,
     useColorModeValue,
+    Icon,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -173,6 +174,10 @@ export const Login = () => {
                                         placement={'top'}
                                     >
                                         <Button
+                                            w={"22ch"}
+                                            fontSize="sm"
+                                            h={14}
+                                            noOfLines={2}
                                             onClick={async () => {
                                                 await register(ROLES.DUEÑO);
                                             }}
@@ -180,18 +185,23 @@ export const Login = () => {
                                                 bgGradient: 'linear(to-r, red.400,pink.400)',
                                                 boxShadow: 'xl',
                                             }}
-                                            leftIcon={<IoIosHome />}
+                                            leftIcon={<Icon as={IoIosHome} boxSize={18} />}
                                             borderRight='1px dashed lightslategray'
                                         >
-                                            <Text>Registrar mi hogar</Text>
+                                            <Text>Soy dueño de hogar</Text>
                                         </Button>
                                     </Tooltip>
                                     <Tooltip
                                         closeOnClick={false}
                                         label={<Text textAlign={"center"}>Soy un viajero/a <br />con ganas de cuidar mascotas</Text>}
                                         hasArrow
-                                        placement={'top'}>
+                                        placement={'top'}
+                                    >
                                         <Button
+                                            w={"22ch"}
+                                            h={14}
+                                            noOfLines={2}
+                                            fontSize="sm"
                                             onClick={async () => {
                                                 await register(ROLES.CUIDADOR);
                                             }}
@@ -200,9 +210,9 @@ export const Login = () => {
                                                 boxShadow: 'xl',
                                             }}
                                             borderLeft='1px dashed lightslategray'
-                                            rightIcon={<IoIosPaw />}
+                                            rightIcon={<Icon as={IoIosPaw} boxSize={18} />}
                                         >
-                                            Registrarme como cuidador/a
+                                            <Text>Soy cuidador/a</Text>
                                         </Button>
                                     </Tooltip>
                                 </ButtonGroup>
