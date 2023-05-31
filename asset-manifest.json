@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/PetHouseCare/static/css/main.57c3b691.css",
-    "main.js": "/PetHouseCare/static/js/main.27c21cac.js",
+    "main.js": "/PetHouseCare/static/js/main.8302acd9.js",
     "index.html": "/PetHouseCare/index.html",
     "main.57c3b691.css.map": "/PetHouseCare/static/css/main.57c3b691.css.map",
-    "main.27c21cac.js.map": "/PetHouseCare/static/js/main.27c21cac.js.map"
+    "main.8302acd9.js.map": "/PetHouseCare/static/js/main.8302acd9.js.map"
   },
   "entrypoints": [
     "static/css/main.57c3b691.css",
-    "static/js/main.27c21cac.js"
+    "static/js/main.8302acd9.js"
   ]
 }
