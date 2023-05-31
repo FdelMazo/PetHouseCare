@@ -11,6 +11,20 @@ export function ListaHogares() {
     const [homeowners, sethomeowners] = useState([]);
     const [search, setSearch] = useState('');
     const [pactos, setPactos] = useState([]);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        async function fetchUser () {
+            const session = await db.session.toCollection().first();
+            const _user = await db.users.where('id').equals(session.userId).first();
+            if (!_user) {
+                navigate(ROUTES.LOGIN, { relative: 'path' });
+            }
+            setUser(_user);
+        }
+        fetchUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     const navigate = useNavigate();
 
 
@@ -48,10 +62,11 @@ export function ListaHogares() {
             <Navbar currentRoute={ROUTES.HOMEOWNERS} />
             <Container bg={useColorModeValue('gray.100', 'gray.700')} centerContent p={10} borderRadius={2} minW='75vw'
                        maxW='75vw' h='fit-content'>
+
                 <Heading>Estos cuidadores quieren hacer un pacto contigo</Heading>
                 <Container bgGradient='linear(to-r, red.400,pink.400)' padding='17px' margin='17px' borderRadius='14px'>
-                    {(!pactos.filter((pacto) => !pacto.accepted).length) ? <Text color={'white'}>No hay pactos para aceptar</Text>
-                        : pactos.filter((pacto) => !pacto.accepted).map((pacto) => {
+                    {(!pactos.filter((pacto) => !pacto.accepted && pacto.homeownerId === user.id).length) ? <Text color={'white'}>No hay pactos para aceptar</Text>
+                        : pactos.filter((pacto) => !pacto.accepted && pacto.homeownerId === user.id).map((pacto) => {
                         return <Flex justifyContent={'space-between'}>
                             <Text color={'white'} fontSize={'25'} fontWeight={'800'}>{findName(pacto)}</Text>
                             <Button color={'white'} backgroundColor={'transparent'} borderWidth={3} onClick={() => {
