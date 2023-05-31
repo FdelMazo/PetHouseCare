@@ -6,7 +6,7 @@ import { Navbar } from './Components/Navbar';
 import { ROUTES } from './routes';
 import { FaHandshake } from 'react-icons/fa';
 
-function itsMyPact(pacto, user) {
+export function itsMyPact(pacto, user) {
     if (user.role === ROLES.DUEÑO) {
         return pacto.homeownerId === user.id
     }
@@ -19,6 +19,7 @@ export function MisPactos() {
     const [homeowners, sethomeowners] = useState([]);
     const [caretakers, setCaretakers] = useState([]);
     const [user, setUser] = useState(null);
+    const [misPactos, setMisPactos] = useState([]);
 
     useEffect(() => {
         async function fetchUser () {
@@ -41,8 +42,9 @@ export function MisPactos() {
             const pactos = await db.pakts.toArray();
             const fechaActual = new Date();
 
-            const _pacto = pactos.find((pacto) => fechaActual >= pacto.startDate && fechaActual <= pacto.endDate && itsMyPact(pacto, user))
+            const _pacto = pactos.find((pacto) => fechaActual >= pacto.startDate && fechaActual <= pacto.endDate && itsMyPact(pacto, user) && pacto.accepted)
             setPacto(_pacto);
+            setMisPactos(pactos.filter(pact => itsMyPact(pact, user)));
         };
         action();
     }, [user]);
@@ -92,5 +94,28 @@ export function MisPactos() {
                     : <Text>No tenés pactos activos</Text>
                 }
             </Container>
+        <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
+                   minW='75vw'
+                   maxW='75vw' fontWeight={'700'} minH={'80vh'}>
+                <Heading>Historial de pactos</Heading>
+            {
+                // REMOVER EL TRUE
+                misPactos.filter(pacto => true || pacto.endDate < (new Date())).map((pacto) => {
+                    return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
+                          minW={'40%'} justifyContent={'space-between'}>
+                        <Flex flexDirection={'column'}>
+                            <Text>Nombre: {findName(finder,pacto)}</Text>
+                            <Text>Numero: {findNumber(finder, pacto)}</Text>
+                            <Text>Email: {findEmail(finder, pacto)}</Text>
+                            <Text>From: {pacto.startDate.toLocaleDateString('es-AR')}</Text>
+                            <Text>To: {pacto.endDate.toLocaleDateString('es-AR')}</Text>
+                        </Flex>
+                        <Flex flexDirection={'column'}>
+                            <Icon as={FaHandshake} boxSize={'85px'} marginX={'3rem'} color={'blackAlpha.700'}/>
+                        </Flex>
+                    </Flex>
+                })
+            }
+        </Container>
     </>;
 }

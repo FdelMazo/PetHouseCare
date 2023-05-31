@@ -8,6 +8,9 @@ db.version(10).stores({
   caretakerRatings: '[caretakerId+homeownerId],rating',
   homeownerRatings: '[homeownerId+caretakerId],rating',
   pakts: '[caretakerId+homeownerId]'
+}).upgrade((trans) => {
+  trans.table("homeownerRatings").toCollection().modify(homeOwnerRating => {
+  })
 });
 
 export const ROLES = {

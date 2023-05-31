@@ -16,6 +16,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
+import ReactStars from 'react-stars';
+import { itsMyPact } from '../MisPactos';
 
 export const Cuidador = () => {
   let { id } = useParams();
@@ -27,6 +29,7 @@ export const Cuidador = () => {
   const [myTextEvaluation, setMyTextEvaluation] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [ratingFormErrorMessage, setRatingFormErrorMessage] = useState('');
+  const [pacts, setPacts] = useState([]);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
@@ -59,9 +62,14 @@ export const Cuidador = () => {
       setMyTextEvaluation(myRating ? myRating.text : '');
       setAvgRating(sum / count);
       setRatingCount(count);
+
+      if (user) {
+        const pakts = await db.pakts.toArray();
+        setPacts(pakts.filter((pakt) => itsMyPact(pakt, user)))
+      }
     }
     action();
-  }, [id, myRating, myTextEvaluation]);
+  }, [id, myRating, myTextEvaluation, user]);
 
   const setRating = async (rating) => {
     rating = Number(rating);
@@ -142,21 +150,25 @@ export const Cuidador = () => {
                       }}>Pactar</Button>
                     </Box>
                   }
-                  <Box>
-                    <Text>Mi puntuación (del 1 al 5):</Text>
-                    {myRating !== null && <Input type='number'
-                            defaultValue={myRating}
-                            onChange={(event) => setRating(event.target.value)}
-                    />}
-                    <br/>
+                  {pacts.some((pact) => pact.endDate < (new Date())) && <Box>
+                    <Text>Mi puntuación :</Text>
+                    {myRating !== null &&
+                        <ReactStars
+                            count={5}
+                            onChange={(stars) => setRating(stars)}
+                            size={24}
+                            color2={'#ffd700'}
+                            value={myRating} />
+                    }
+                    <br />
                     <Text>Comentario sobre {caretaker.firstName}:</Text>
                     <Input
-                      defaultValue={myTextEvaluation}
-                      placeholder="Comentario"
-                      onChange={(event) => setTextEvaluation(event.target.value)}
+                        defaultValue={myTextEvaluation}
+                        placeholder='Comentario'
+                        onChange={(event) => setTextEvaluation(event.target.value)}
                     />
                     <Text color={'red'}>{ratingFormErrorMessage}</Text>
-                  </Box>
+                  </Box>}
                   <Box>
                     <Text>{ratingCount > 0 ? `${ratingCount} reseña(s). Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
                     <br/>
