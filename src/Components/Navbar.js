@@ -12,7 +12,8 @@ import {
   MenuList,
   MenuItem,
   Icon,
-  Text
+  Text,
+  Box
 } from '@chakra-ui/react';
 import { CUIDADOR_ROUTES, DUEÑO_ROUTES, PUBLIC_ROUTES, ROUTE_TITLES, ROUTES } from '../routes';
 import { useNavigate, Link } from 'react-router-dom';
@@ -20,6 +21,7 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import { IoIosHome, IoIosPaw, IoIosArrowBack } from 'react-icons/io';
 import { db, ROLES } from '../db';
 import { useEffect, useState } from 'react';
+import ReactStars from 'react-stars';
 
 export const ColorModeSwitcher = props => {
   const { toggleColorMode } = useColorMode();
@@ -47,6 +49,11 @@ export const Navbar = ({ backTo, currentRoute }) => {
 
   const [user, setUser] = useState(null);
   const [routes, setRoutes] = useState(null);
+  const [avgRating, setAvgRating] = useState(0);
+  const average = (ratings) => {
+    return ratings.length ? ratings.map((rating) => rating.rating).reduce((suma, rating) => suma + rating, 0) / ratings.reduce((suma, rating) => suma + 1, 0) : 0
+  }
+
   useEffect(() => {
     async function fetchUser () {
       const session = await db.session.toCollection().first();
@@ -55,9 +62,11 @@ export const Navbar = ({ backTo, currentRoute }) => {
       switch (_user && _user.role) {
         case 'dueño':
           setRoutes(DUEÑO_ROUTES)
+          setAvgRating(average(await db.homeownerRatings.where('homeownerId').equals(_user.id).toArray()));
           break;
         case 'cuidador':
           setRoutes(CUIDADOR_ROUTES)
+          setAvgRating(average(await db.caretakerRatings.where('caretakerId').equals(_user.id).toArray()));
           break;
         default:
           setRoutes(PUBLIC_ROUTES)
@@ -68,7 +77,7 @@ export const Navbar = ({ backTo, currentRoute }) => {
   }, []);
 
   return user ? (
-    <Flex px={4} h={16} alignItems={'center'} justifyContent="space-between">
+    <Flex px={4} h={20} alignItems={'center'} justifyContent="space-between">
       <Heading fontSize={'2xl'} display="flex">
         {backTo && <Icon as={IoIosArrowBack} cursor="pointer" color="pink.500" onClick={() => navigate(backTo, { relative: 'path' })} mr={2} />}
         {routes.map(route => {
@@ -86,12 +95,11 @@ export const Navbar = ({ backTo, currentRoute }) => {
         <ColorModeSwitcher px={4} />
         {user &&
           <Menu>
-            <Text alignSelf='center' paddingRight='4px'>{`@${user?.username}`}</Text>
             <MenuButton
               as={Button}
               rounded={'full'}
               variant={'link'}
-              cursor={'pointer'}
+              _hover={{ textDecoration: 'none' }}
             >
               <Avatar size="sm">
                 <AvatarBadge
@@ -101,6 +109,23 @@ export const Navbar = ({ backTo, currentRoute }) => {
                   border="none"
                 />
               </Avatar>
+              <Text fontSize="xs" alignSelf='center' mt={1}>
+                {`@${user?.username}`}
+                {avgRating > 0 && (
+                  <Box css={{
+                    "& span": {
+                      fontSize: "large !important",
+                    },
+                    "& div": {
+                      display: "flex",
+                      justifyContent: "center",
+
+                    }
+                  }}>
+                    <ReactStars value={avgRating} edit={false} />
+                  </Box>
+                )}
+              </Text>
             </MenuButton>
             <MenuList>
               <MenuItem

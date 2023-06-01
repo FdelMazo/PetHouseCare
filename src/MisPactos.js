@@ -1,12 +1,13 @@
-import { Container, Flex, Heading, Icon, Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Container, Flex, Heading, Icon, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, ROLES } from './db';
 import { Navbar } from './Components/Navbar';
 import { ROUTES } from './routes';
-import { FaHandshake } from 'react-icons/fa';
+import { FaEnvelope, FaHandshake, FaPhoneAlt } from 'react-icons/fa';
 
 export function itsMyPact(pacto, user) {
+    if (!user) return false;
     if (user.role === ROLES.DUEÑO) {
         return pacto.homeownerId === user.id
     }
@@ -58,7 +59,7 @@ export function MisPactos() {
     }
 
     const findName = (find, pacto) => {
-        return find(pacto).firstName + " " + find(pacto).lastName ;
+        return find(pacto).firstName ? (find(pacto).firstName + " " + find(pacto).lastName) : `@${find(pacto).username}`;
     };
 
     const findNumber = (find, pacto) => {
@@ -72,76 +73,66 @@ export function MisPactos() {
 
     const finder = user && user.role === ROLES.DUEÑO ? findCaretaker : findHomeOwner
 
+    const Pacto = ({ pacto }) => {
+        return <Card width="80%" m={8} px={8} py={2}>
+            <CardHeader>
+                <Heading size='md'>
+                    {findName(finder, pacto)}
+                </Heading>
+                <Text bgGradient='linear(to-r, red.400,pink.400)' bgClip='text'>
+                    Pacto desde el {new Date(pacto.startDate).toLocaleDateString('es-AR')} hasta el {new Date(pacto.endDate).toLocaleDateString('es-AR')}
+                </Text>
+            </CardHeader>
+            <CardBody>
+                <Flex gap={'30px'} alignItems={"center"}>
+                    <Icon as={FaHandshake} boxSize="3em" />
+                    <Box>
+                        {findNumber(finder, pacto) && <Flex alignItems={"center"} mb={1}>
+                            <Icon as={FaPhoneAlt} color="pink.400" boxSize={4} mr={2} />
+                            <Text color='grey'>{findNumber(finder, pacto)}</Text>
+                        </Flex>}
+                        {findEmail(finder, pacto) && <Flex alignItems={"center"} mb={1}>
+                            <Icon as={FaEnvelope} color="pink.400" boxSize={4} mr={2} />
+                            <Text color='grey'>{findEmail(finder, pacto)}</Text>
+                        </Flex>}
+                    </Box>
+                </Flex>
+            </CardBody>
+        </Card>
+
+
+    }
+
 
     return <>
         <Navbar currentRoute={ROUTES.MIS_PACTOS} />
-            <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
-                       minW='75vw'
-                       maxW='75vw' fontWeight={'700'} minH={'80vh'}>
-                <Heading>Pacto actual</Heading>
-                {pacto && user? <>
-                    <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
-                          minW={'40%'} justifyContent={'space-between'} margin={20}>
-                        <Flex flexDirection={'column'}>
-                        <Text>Nombre: {findName(finder,pacto)}</Text>
-                        <Text>Numero: {findNumber(finder, pacto)}</Text>
-                        <Text>Email: {findEmail(finder, pacto)}</Text>
-                        <Text>From: {pacto.startDate.toLocaleDateString('es-AR')}</Text>
-                        <Text>To: {pacto.endDate.toLocaleDateString('es-AR')}</Text>
-                        </Flex>
-                        <Icon as={FaHandshake} boxSize={'85px'} marginX={'3rem'} color={'blackAlpha.700'}/>
-                    </Flex>
-                    </>
-                    : <Text>No tenés pactos activos</Text>
-                }
-            </Container>
+        <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent mb={4} p={10} borderRadius={2} maxW="80%" h="fit-content">
+            <VStack w="80%">
+                {(pacto && user) &&
+                    <>
+                        <Heading>Pacto actual</Heading>
+                        <Pacto pacto={pacto} key={pacto.id} />
+                    </>}
 
-        <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
-                   minW='75vw'
-                   maxW='75vw' fontWeight={'700'} minH={'80vh'}>
-            <Heading>Pactos a futuro</Heading>
-            {
-                // REMOVER EL TRUE
-                misPactos.filter(pacto => pacto.startDate > (new Date()) && pacto.accepted).map((pacto) => {
-                    return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
-                                 minW={'40%'} justifyContent={'space-between'}>
-                        <Flex flexDirection={'column'}>
-                            <Text>Nombre: {findName(finder,pacto)}</Text>
-                            <Text>Numero: {findNumber(finder, pacto)}</Text>
-                            <Text>Email: {findEmail(finder, pacto)}</Text>
-                            <Text>From: {pacto.startDate.toLocaleDateString('es-AR')}</Text>
-                            <Text>To: {pacto.endDate.toLocaleDateString('es-AR')}</Text>
-                        </Flex>
-                        <Flex flexDirection={'column'}>
-                            <Icon as={FaHandshake} boxSize={'85px'} marginX={'3rem'} color={'blackAlpha.700'}/>
-                        </Flex>
-                    </Flex>
-                })
-            }
+                {!!(misPactos.filter(pacto => pacto.startDate > (new Date()) && pacto.accepted).length) &&
+                    <>
+                        <Heading>Pactos a futuro</Heading>
+                    {misPactos.filter(pacto => pacto.startDate > (new Date()) && pacto.accepted).map((pacto) => {
+                        return <Pacto pacto={pacto} key={pacto.id} />
+                    })
+                    }
+                    </>}
+
+                {!!(misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).length) &&
+                    <>
+                        <Heading>Pactos pasados</Heading>
+                        {misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).map((pacto) => {
+                            return <Pacto pacto={pacto} key={pacto.id} />
+                        })
+                        }
+                    </>}
+            </VStack>
         </Container>
 
-
-        <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
-                   minW='75vw'
-                   maxW='75vw' fontWeight={'700'} minH={'80vh'}>
-                <Heading>Historial de pactos</Heading>
-            {
-                misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).map((pacto) => {
-                    return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
-                          minW={'40%'} justifyContent={'space-between'} margin={3.5}>
-                        <Flex flexDirection={'column'}>
-                            <Text>Nombre: {findName(finder,pacto)}</Text>
-                            <Text>Numero: {findNumber(finder, pacto)}</Text>
-                            <Text>Email: {findEmail(finder, pacto)}</Text>
-                            <Text>From: {pacto.startDate.toLocaleDateString('es-AR')}</Text>
-                            <Text>To: {pacto.endDate.toLocaleDateString('es-AR')}</Text>
-                        </Flex>
-                        <Flex flexDirection={'column'}>
-                            <Icon as={FaHandshake} boxSize={'85px'} marginX={'3rem'} color={'blackAlpha.700'}/>
-                        </Flex>
-                    </Flex>
-                })
-            }
-        </Container>
-    </>;
+    </>
 }

@@ -1,14 +1,18 @@
 import {
-  Box, Button,
+  Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
   Container,
+  Flex,
   Heading,
+  Icon,
   Input,
   Stack,
   StackDivider,
   Text,
+  VStack,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { db } from '../db';
@@ -18,6 +22,7 @@ import { Navbar } from './Navbar';
 import { ROUTES } from '../routes';
 import ReactStars from 'react-stars';
 import { itsMyPact } from '../MisPactos';
+import { IoIosHome } from 'react-icons/io';
 
 export const Hogar = () => {
   let { id } = useParams();
@@ -28,14 +33,13 @@ export const Hogar = () => {
   const [myRating, setMyRating] = useState(null);
   const [myTextEvaluation, setMyTextEvaluation] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [ratingFormErrorMessage, setRatingFormErrorMessage] = useState('');
   const [pacts, setPacts] = useState([]);
 
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    async function fetchUser () {
+    async function fetchUser() {
       const session = await db.session.toCollection().first();
       const _user = await db.users.where('id').equals(session.userId).first();
       if (!_user) {
@@ -54,141 +58,142 @@ export const Hogar = () => {
       const ratings = await db.homeownerRatings.where('homeownerId').equals(_homeOwner.id).toArray();
       setRatings(ratings);
       const ratingsWithNumber = ratings.filter(rating => rating.rating);
-      const sum = ratingsWithNumber.reduce((a, b) => a.rating + b.rating, { rating: 0 });
+      const sum = ratingsWithNumber.map(rating => rating.rating).reduce((a, b) => a + b, 0);
       const count = ratingsWithNumber.length;
       const session = await db.session.toCollection().first();
       setCurrentUserId(session.userId);
-      const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([_homeOwner.id, session.userId]).first()
-      setMyRating(myRating ? myRating.rating : '');
-      setMyTextEvaluation(myRating ? myRating.text : '');
       setAvgRating(sum / count);
       setRatingCount(count);
 
       if (user) {
-        const pakts = await db.pakts.toArray();
+        const pakts = (await db.pakts.toArray()).filter((pakt) => pakt.homeownerId === _homeOwner.id);
         setPacts(pakts.filter((pakt) => itsMyPact(pakt, user)))
       }
     }
     action();
   }, [id, myRating, myTextEvaluation, user]);
 
-  const setRating = async (rating) => {
-    rating = Number(rating);
-    if (!rating || rating > 5 || rating < 1) {
-      setRatingFormErrorMessage('La reseña es un número del 1 al 5');
-      return;
+  useEffect(() => {
+    const action = async () => {
+      if (!homeOwner) return
+      const session = await db.session.toCollection().first();
+      const alreadyRated = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([homeOwner.id, session.userId]).first()
+      if (alreadyRated) {
+        setMyRating(alreadyRated.rating);
+        setMyTextEvaluation(alreadyRated.text);
+      }
     }
-    const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([homeOwner.id, currentUserId]).first();
-    if (myRating) {
-      myRating.rating = rating;
-      await db.homeownerRatings.put(myRating);
-    } else {
-      await db.homeownerRatings.put({caretakerId: currentUserId, homeownerId: homeOwner.id, rating: rating});
-    }
-    setMyRating(rating);
-    setRatingFormErrorMessage('');
-  };
+    action()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [homeOwner?.id, id])
 
-  const setTextEvaluation = async (text) => {
-    const myRating = await db.homeownerRatings.where('[homeownerId+caretakerId]').equals([homeOwner.id, currentUserId]).first();
+  const submitReview = async () => {
+    const rating = { caretakerId: currentUserId, homeownerId: homeOwner.id }
     if (myRating) {
-      myRating.text = text;
-      await db.homeownerRatings.put(myRating);
-    } else {
-      await db.homeownerRatings.put({caretakerId: currentUserId, homeownerId: homeOwner.id, text: text});
+      rating.rating = myRating;
     }
-    setMyTextEvaluation(text);
+    if (myTextEvaluation) {
+      rating.text = myTextEvaluation;
+    }
+    await db.homeownerRatings.put(rating);
   }
 
   return (
     <>
-      <Navbar backTo={ROUTES.CARETAKERS} />
-      <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent p={10} borderRadius={2} maxW="80ch" h="fit-content">
-        <Card width={700}>
+      <Navbar backTo={ROUTES.HOMEOWNERS} />
+      <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent mb={4} p={10} borderRadius={2} maxW="80%" h="fit-content">
+        <Card width="100%">
           {homeOwner ? (
             <>
               <CardHeader>
-                <Heading size='lg'>{homeOwner.firstName} {homeOwner.lastName}</Heading>
+                <Flex>
+                  <Icon as={IoIosHome} boxSize={7} mr={1} />
+                  <Heading size='lg'>{homeOwner.firstName} {homeOwner.lastName}</Heading>
+                </Flex>
                 <Text fontSize='sm' color='grey'>Dueño/a</Text>
               </CardHeader>
-              <CardBody textAlign='left'>
-                <Stack divider={<StackDivider />} spacing='4'>
-                  <Box>
-                    <Heading size='xs' textTransform='uppercase'>
+              <CardBody>
+                <Stack divider={<StackDivider />} spacing={6}>
+
+                  {homeOwner.description && <VStack align="flex-start">
+                    <Heading fontSize='md' textTransform='uppercase'>
                       Descripción
                     </Heading>
-                    <Text paddingTop='2' fontSize='sm'>
+                    <Text fontSize='lg'>
                       {homeOwner.description}
                     </Text>
-                    <Heading size='xs' mt={2} textTransform='uppercase'>
-                      Sus mascotas
+                  </VStack>}
+                  {homeOwner.home?.pets && <VStack align="flex-start">
+                    <Heading fontSize='md' textTransform='uppercase'>
+                      Mascotas
                     </Heading>
-                    <Text paddingTop='2' fontSize='sm'>
+                    <Text fontSize='lg'>
                       {homeOwner.home.pets}
                     </Text>
-                    <Heading size='xs' mt={2} textTransform='uppercase'>
+                  </VStack>}
+                  {homeOwner.home?.location && <VStack align="flex-start">
+                    <Heading fontSize='md' textTransform='uppercase'>
                       Ubicación
                     </Heading>
-                    <Text paddingTop='2' fontSize='sm'>
+                    <Text fontSize='lg'>
                       {homeOwner.home.location}
                     </Text>
-                  </Box>
-                  {
-                    homeOwner.nextTrip &&
-                    <Box>
-                      <Heading size='xs' textTransform='uppercase'>
-                          Próximo viaje
-                        </Heading>
-                        <Box paddingTop='2' flexDirection='row' display='flex'>
-                          <Box flexShrink='0' marginRight='2' color='darkslategrey'>
-                            <span>{new Date(homeOwner.nextTrip.from).toLocaleDateString('es-AR')} ➜ {new Date(homeOwner.nextTrip.to).toLocaleDateString('es-AR')}</span>
-                          </Box>
-                          <Box flexBasis='0.7' flexGrow='1'>
-                            {homeOwner.nextTrip?.location}
-                          </Box>
-                        </Box>
-                      <Button onClick={async () => {
-                        let storeName = {
-                          homeownerId: homeOwner.id,
-                          caretakerId: user.id,
-                          accepted: false
-                        };
-                        await db.pakts.put(storeName)
-                        navigate(ROUTES.CARETAKERS)
-                      }}>Pactar</Button>
+                  </VStack>}
+
+                  <VStack align="flex-start" spacing={0}>
+                    <Box css={{
+                      "& *": {
+                        fontSize: "larger !important",
+                      }
+                    }}>
+                      <ReactStars edit={false} value={avgRating} />
                     </Box>
+                    <Text fontSize="sm !important">{ratingCount > 0 ? `${ratingCount} reseña(s)` : 'No hay puntuaciones'}</Text>
+                    <VStack align="flex-start" spacing={1}>
+                      {ratings.filter(rating => rating.text && rating.text.trim()).length &&
+                        ratings.map((rating) => (rating.text && rating.text.trim() &&
+                          <Text
+                            border="solid 1px lightgrey"
+                            borderRadius={2}
+                            p={2}
+                            key={`${rating.caretakerId}${rating.homeownerId}`}
+                          >
+                            "{rating.text}"
+                          </Text>
+                        ))
+                      }
+                    </VStack>
+                  </VStack>
+
+                  {pacts.some((pact) => pact.endDate < (new Date())) &&
+                    <VStack align="flex-start">
+                      <Text fontSize="md" fontWeight={"600"}>Contanos tu experiencia con {homeOwner.firstName}!</Text>
+                      <Box>
+                        <Box css={{
+                          "& *": {
+                            fontSize: "x-large !important",
+                          }
+                        }}>
+                          <ReactStars
+                            onChange={(stars) => setMyRating(stars)}
+                            color2={'#ffd700'}
+                            value={myRating} />
+                        </Box>
+                        <Input
+                          defaultValue={myTextEvaluation}
+                          placeholder='Comentario'
+                          onChange={(event) => setMyTextEvaluation(event.target.value)}
+                        />
+                      </Box>
+                      <Button
+                        onClick={async () => {
+                          await submitReview();
+                          navigate(ROUTES.HOMEOWNERS)
+                        }}
+                        isDisabled={!myRating || !myTextEvaluation}
+                      >Enviar</Button>
+                    </VStack>
                   }
-                  { pacts.some((pact) => pact.endDate < (new Date())) && <Box>
-                    <Text>Mi puntuación:</Text>
-                    {myRating !== null && <ReactStars
-                        count={5}
-                        onChange={(stars) => setRating(stars)}
-                        size={24}
-                        color2={'#ffd700'}
-                        value={myRating} />}
-                    <br />
-                    <Text>Comentario sobre {homeOwner.firstName}:</Text>
-                    <Input
-                        defaultValue={myTextEvaluation}
-                        placeholder='Comentario'
-                        onChange={(event) => setTextEvaluation(event.target.value)}
-                    />
-                    <Text color={'red'}>{ratingFormErrorMessage}</Text>
-                  </Box>}
-                  <Box>
-                    <Text>{ratingCount > 0 ? `${ratingCount} reseña(s). Promedio: ${avgRating.toFixed(1)}` : 'No hay puntuaciones'}</Text>
-                    <br/>
-                    <Text>Comentarios:</Text>
-                    {ratings.map((rating) => (rating.text && rating.text.trim() && <Text
-                      border="solid 1px lightgrey"
-                      padding="5px"
-                      marginTop="5px"
-                      key={`${rating.caretakerId}${rating.homeownerId}`}
-                    >
-                      "{rating.text}"
-                    </Text>))}
-                    {!ratings.filter(rating => rating.text && rating.text.trim()).length && <Text>No hay comentarios</Text>}
-                  </Box>
                 </Stack>
               </CardBody>
             </>

@@ -2,15 +2,12 @@ import Dexie from 'dexie';
 
 export const db = new Dexie('pethousecare');
 window.__db = db;
-db.version(10).stores({
+db.version(11).stores({
   users: '++id,username,role',
   session: 'userId',
   caretakerRatings: '[caretakerId+homeownerId],rating',
   homeownerRatings: '[homeownerId+caretakerId],rating',
   pakts: '[caretakerId+homeownerId]'
-}).upgrade((trans) => {
-  trans.table("homeownerRatings").toCollection().modify(homeOwnerRating => {
-  })
 });
 
 export const ROLES = {
@@ -342,30 +339,35 @@ const FIXTURES = {
     {
       homeownerId: 1_8,
       caretakerId: 2_2,
-      rating: 3.5
+      rating: 3.5,
+      text: "Es un hogar muy ameno y los bichitos son lo mas. Tuve un poco de frio igual..."
     },
     {
       homeownerId: 1_2,
       caretakerId: 2_6,
-      rating: 5
+      rating: 5,
+      text: "Impresionante. Super recomiendo esta estadía"
     },
-
   ],
   caretakerRating: [
     {
       caretakerId: 2_2,
       homeownerId: 1_8,
-      rating: 3
+      rating: 3,
+      text: "Super atento y amable."
     },
     {
       caretakerId: 2_6,
       homeownerId: 1_2,
-      rating: 4.5
+      rating: 4.5,
+      text: "No tengo ninguna queja, salio todo impecable"
+
     },
     {
       caretakerId: 2_6,
       homeownerId: 1_10,
-      rating: 4
+      rating: 4,
+      text: "Todo bien, pero me hubiera gustado que me mande mas fotos de mi gatita."
     },
   ]
 }

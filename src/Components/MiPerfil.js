@@ -14,11 +14,8 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { ROUTES } from '../routes';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from './Navbar';
-import './styles.css'
 import { db, ROLES } from '../db';
 
 export function MiPerfil() {
@@ -104,18 +101,18 @@ export function MiPerfil() {
                                 <FormLabel color="white">
                                     Desde:
                                 </FormLabel>
-                                <DatePicker className="datePicker" selected={user.nextTrip?.from} onChange={(from) => {
-                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), from } });
-                                }} />
+                                <Input type="date" color="white" onChange={(e) => {
+                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), from: new Date(e.target.value) } });
+                                }} value={user.nextTrip?.from.toISOString().split("T")[0]} />
                             </Box>
 
                             <Box>
                                 <FormLabel color="white">
                                     Hasta:
                                 </FormLabel>
-                                <DatePicker className="datePicker" selected={user.nextTrip?.to} onChange={(to) => {
-                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), to } });
-                                }} />
+                                <Input type="date" color="white" onChange={(e) => {
+                                    setUser({ ...user, nextTrip: { ...(user.nextTrip), to: new Date(e.target.value) } });
+                                }} value={user.nextTrip?.to.toISOString().split("T")[0]} />
                             </Box>
                         </Flex>
                     </Card>

@@ -6,7 +6,7 @@ export const ROUTES = {
     CARETAKER: '/caretakers/:id',
     HOMEOWNER: '/homeowners/:id',
     PROFILE: '/profile',
-    MIS_PACTOS: '/mis-pactos'
+    MIS_PACTOS: '/pacts'
 }
 
 export const ROUTE_TITLES = {
@@ -22,7 +22,7 @@ export const DUEÑO_ROUTES = [
   ROUTES.CARETAKERS,
   ROUTES.CARETAKER,
   ROUTES.PROFILE,
-    ROUTES.MIS_PACTOS
+  ROUTES.MIS_PACTOS
 ]
 
 export const CUIDADOR_ROUTES = [

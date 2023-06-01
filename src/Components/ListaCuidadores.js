@@ -1,19 +1,20 @@
 import TarjetaCuidador from './TarjetaCuidador';
-import { Box, Button, Container, Flex, FormLabel, Input, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Container, Divider, Flex, Heading, Icon, Input, InputGroup, InputLeftAddon, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
-import './styles.css';
 import { ROUTES } from '../routes';
-import DatePicker from 'react-datepicker';
 import { parseISO } from 'date-fns';
+import { IoIosAirplane, IoIosArrowDroprightCircle, IoMdPin } from 'react-icons/io';
+import ReactStars from 'react-stars';
+import { SmallCloseIcon } from '@chakra-ui/icons';
 
 export function ListaCuidadores() {
-  
   const [cuidadores, setCuidadores] = useState([]);
   const [search, setSearch] = useState("");
-  const [startingDate, setStartingDate] = useState(null);
-  const [endingDate, setEndingDate] = useState(null);
+  const [ratingSearch, setRatingSearch] = useState(0);
+  const [startingDate, setStartingDate] = useState((new Date(new Date().setDate(new Date().getDate() - 1))).toISOString().split("T")[0]);
+  const [endingDate, setEndingDate] = useState((new Date(new Date().setFullYear(new Date().getFullYear() + 1))).toISOString().split("T")[0]);
 
   useEffect(() => {
     const action = async () => {
@@ -26,55 +27,59 @@ export function ListaCuidadores() {
   if (!search){
     result = cuidadores;
   } else {
-    result = cuidadores.filter ( (cuidador) => 
-                cuidador.nextTrip.location.toLowerCase().includes(search.toLowerCase())
+    result = cuidadores.filter((cuidador) =>
+      cuidador.nextTrip?.location.toLowerCase().includes(search.toLowerCase())
     )
   }
-
   if (startingDate && endingDate && (startingDate <= endingDate)) {
     result = result.filter((cuidador) => {
       if (!cuidador.nextTrip || !cuidador.nextTrip.from || !cuidador.nextTrip.to) return false;
-
-      return parseISO(cuidador.nextTrip.from) <= endingDate && parseISO(cuidador.nextTrip.to) >= startingDate;
+      return cuidador.nextTrip.from <= parseISO(endingDate) && cuidador.nextTrip.to >= parseISO(startingDate);
     })
   }
 
-  const searcher = (e) => {
-    setSearch(e.target.value)
-  }
   return (
     <>
       <Navbar currentRoute={ROUTES.CARETAKERS} />
-      <Container bg={useColorModeValue("gray.100", "gray.700")} p={10} borderRadius={2} maxW="80ch" h="fit-content">
-        <Input bg="white" color="gray.800" placeholder='Ubicación' value={search} onChange={searcher}/>
-        <Text marginTop="10px">Fecha de viaje:</Text>
-        <Flex>
-          <Box marginRight="10px">
-            <FormLabel>
-              Desde:
-            </FormLabel>
-            <DatePicker className="datePicker" selected={startingDate} onChange={(from) => {
-              setStartingDate(from);
-            }} />
-          </Box>
-          <Box marginRight="10px">
-            <FormLabel>
-              Hasta:
-            </FormLabel>
-            <DatePicker className="datePicker" selected={endingDate} onChange={(to) => {
-              setEndingDate(to);
-            }} />
-          </Box>
-          <Box alignSelf="end">
-            <Button height="24px" background={"lightgrey"} onClick={() => {
-              setStartingDate(null);
-              setEndingDate(null);
-            }}>Reiniciar</Button>
-          </Box>
-        </Flex>
-        {startingDate && endingDate && (startingDate > endingDate) && <Text color="red">La fecha de inicio no puede ser mayor a la de fin</Text>}
+      <Container bg={useColorModeValue("gray.100", "gray.700")} centerContent mb={4} p={10} borderRadius={2} maxW="80%" h="fit-content">
+        <Heading mb={2}>Buscar cuidadores</Heading>
+        <VStack mx={4} w="90%" align={"flex-start"}>
+          <InputGroup w="70%">
+            <InputLeftAddon>
+              <Icon as={IoMdPin} boxSize={5} />
+            </InputLeftAddon>
+            <Input placeholder='Filtrar por ubicación' onChange={(e) => { setSearch(e.target.value) }} />
+          </InputGroup>
+          <InputGroup alignItems={"center"} w="80%">
+            <InputLeftAddon>
+              <Icon as={IoIosAirplane} boxSize={5} />
+            </InputLeftAddon>
+            <Input type="date" onChange={(e) => { setStartingDate(e.target.value); }} value={startingDate} />
+            <Icon as={IoIosArrowDroprightCircle} mx={1} />
+            <Input type="date" onChange={(e) => { setEndingDate(e.target.value); }} value={endingDate} />
+          </InputGroup>
+          {startingDate && endingDate && (startingDate > endingDate) && <Text fontSize="xs" color="red">La fecha de inicio no puede ser mayor a la de fin</Text>}
+          <Flex alignItems="center">
+            <Text mr={2} color="grey" fontSize="lg">
+              {ratingSearch > 0 && <Icon mr={1} cursor="pointer" color="red.400" as={SmallCloseIcon} boxSize={5} onClick={() => setRatingSearch(0)}></Icon>}
+              Calificación mayor a
+            </Text>
+            <Box css={{
+              "& *": {
+                fontSize: "larger !important",
+              }
+            }}>
+              <ReactStars value={ratingSearch} onChange={setRatingSearch}></ReactStars>
+            </Box>
+          </Flex>
+
+          <Divider border="1px dashed black" />
+        </VStack>
+        {!result.length &&
+          <Text mt={4} fontSize="xl" color="gray.500">No se encontraron cuidadores</Text>
+        }
         {result.map((cuidador) => {
-          return <TarjetaCuidador cuidador={cuidador} key={cuidador.username + cuidador.password} />
+          return <TarjetaCuidador ratingFilter={ratingSearch} cuidador={cuidador} key={cuidador.username + cuidador.password} />
         })}
       </Container>
     </>

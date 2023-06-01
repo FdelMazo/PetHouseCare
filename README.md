@@ -6,7 +6,6 @@
 - Icons: https://react-icons.github.io/react-icons/icons?name=io
 
 ```zsh
-npm install        # install deps
-npx husky install  # install pre-commit
+npm install        # install deps & pre-commit hook
 npm start          # open the website
 ```
