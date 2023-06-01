@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/PetHouseCare/static/js/main.7851a6cf.js",
+    "main.js": "/PetHouseCare/static/js/main.d8d2f3f5.js",
     "index.html": "/PetHouseCare/index.html",
-    "main.7851a6cf.js.map": "/PetHouseCare/static/js/main.7851a6cf.js.map"
+    "main.d8d2f3f5.js.map": "/PetHouseCare/static/js/main.d8d2f3f5.js.map"
   },
   "entrypoints": [
-    "static/js/main.7851a6cf.js"
+    "static/js/main.d8d2f3f5.js"
   ]
 }
