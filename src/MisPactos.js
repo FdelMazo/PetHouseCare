@@ -100,7 +100,7 @@ export function MisPactos() {
                 <Heading>Historial de pactos</Heading>
             {
                 // REMOVER EL TRUE
-                misPactos.filter(pacto => true || pacto.endDate < (new Date())).map((pacto) => {
+                misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).map((pacto) => {
                     return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
                           minW={'40%'} justifyContent={'space-between'}>
                         <Flex flexDirection={'column'}>
