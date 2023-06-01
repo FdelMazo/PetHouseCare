@@ -126,7 +126,6 @@ export function MisPactos() {
                    maxW='75vw' fontWeight={'700'} minH={'80vh'}>
                 <Heading>Historial de pactos</Heading>
             {
-                // REMOVER EL TRUE
                 misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).map((pacto) => {
                     return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
                           minW={'40%'} justifyContent={'space-between'} margin={3.5}>

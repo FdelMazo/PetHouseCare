@@ -1,15 +1,18 @@
 import TarjetaHogar from './TarjetaHogar';
-import { Input, Container, useColorModeValue, Text, Flex, Heading, Button } from '@chakra-ui/react';
+import { Input, Container, useColorModeValue, Text, Flex, Heading, Button, IconButton } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { db, ROLES } from '../db';
 import { Navbar } from './Navbar';
 import './styles.css';
 import { ROUTES } from '../routes';
 import { useNavigate } from 'react-router-dom';
+import ReactStars from 'react-stars';
+import { CloseIcon } from '@chakra-ui/icons';
 
 export function ListaHogares() {
     const [homeowners, sethomeowners] = useState([]);
     const [search, setSearch] = useState('');
+    const [ratingSearch, setRatingSearch] = useState(0);
     const [pactos, setPactos] = useState([]);
     const [user, setUser] = useState(null);
 
@@ -78,8 +81,13 @@ export function ListaHogares() {
                 </Container>
                 <Heading>Buscar cuidadores</Heading>
                 <Input bg='white' color='gray.800' placeholder='Ubicación' value={search} onChange={searcher} />
+                <Flex width={"80%"} justifyContent={"space-evenly"} bg={"white"} marginY={"15px"} paddingY={"5px"} alignItems={"center"}>
+                    <Text>Calificación mayor a:</Text>
+                    <ReactStars value={ratingSearch} onChange={setRatingSearch}></ReactStars>
+                    <IconButton onClick={() => setRatingSearch(0)} size={"xs"} icon={<CloseIcon/>} colorScheme='pink' variant='solid'  aria-label={'Search database'}/>
+                </Flex>
                 {result.map((homeowner) => {
-                    return <TarjetaHogar homeowner={homeowner} key={homeowner.username + homeowner.password} />;
+                    return <TarjetaHogar ratingFilter={ratingSearch} homeowner={homeowner} key={homeowner.username + homeowner.password} />;
                 })}
             </Container>
         </>
