@@ -180,7 +180,7 @@ export const Cuidador = () => {
 
                   {pacts.some((pact) => pact.endDate < (new Date())) &&
                     <VStack align="flex-start">
-                      <Text fontSize="md" fontWeight={"600"}>Contanos tu experiencia con {caretaker.firstName}!</Text>
+                      <Text fontSize="md" fontWeight={"600"}>Mi puntuación:</Text>
                       <Box>
                         <Box css={{
                           "& *": {
