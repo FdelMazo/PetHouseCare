@@ -58,7 +58,7 @@ export function MisPactos() {
     }
 
     const findName = (find, pacto) => {
-        return find(pacto).username;
+        return find(pacto).firstName + " " + find(pacto).lastName ;
     };
 
     const findNumber = (find, pacto) => {
@@ -78,9 +78,10 @@ export function MisPactos() {
             <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
                        minW='75vw'
                        maxW='75vw' fontWeight={'700'} minH={'80vh'}>
-                {pacto && user? <><Heading>Pacto actual</Heading>
+                <Heading>Pacto actual</Heading>
+                {pacto && user? <>
                     <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
-                          minW={'40%'} justifyContent={'space-between'}>
+                          minW={'40%'} justifyContent={'space-between'} margin={20}>
                         <Flex flexDirection={'column'}>
                         <Text>Nombre: {findName(finder,pacto)}</Text>
                         <Text>Numero: {findNumber(finder, pacto)}</Text>
@@ -94,6 +95,32 @@ export function MisPactos() {
                     : <Text>No tenés pactos activos</Text>
                 }
             </Container>
+
+        <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
+                   minW='75vw'
+                   maxW='75vw' fontWeight={'700'} minH={'80vh'}>
+            <Heading>Pactos a futuro</Heading>
+            {
+                // REMOVER EL TRUE
+                misPactos.filter(pacto => pacto.startDate > (new Date()) && pacto.accepted).map((pacto) => {
+                    return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
+                                 minW={'40%'} justifyContent={'space-between'}>
+                        <Flex flexDirection={'column'}>
+                            <Text>Nombre: {findName(finder,pacto)}</Text>
+                            <Text>Numero: {findNumber(finder, pacto)}</Text>
+                            <Text>Email: {findEmail(finder, pacto)}</Text>
+                            <Text>From: {pacto.startDate.toLocaleDateString('es-AR')}</Text>
+                            <Text>To: {pacto.endDate.toLocaleDateString('es-AR')}</Text>
+                        </Flex>
+                        <Flex flexDirection={'column'}>
+                            <Icon as={FaHandshake} boxSize={'85px'} marginX={'3rem'} color={'blackAlpha.700'}/>
+                        </Flex>
+                    </Flex>
+                })
+            }
+        </Container>
+
+
         <Container bg='gray.100' centerContent marginBottom={'30px'} borderRadius={2}
                    minW='75vw'
                    maxW='75vw' fontWeight={'700'} minH={'80vh'}>
@@ -102,7 +129,7 @@ export function MisPactos() {
                 // REMOVER EL TRUE
                 misPactos.filter(pacto => pacto.endDate < (new Date()) && pacto.accepted).map((pacto) => {
                     return <Flex flexDirection={'row'} alignItems={'center'} bg={'gray.300'} padding={'14px'} borderRadius={'10px'}
-                          minW={'40%'} justifyContent={'space-between'}>
+                          minW={'40%'} justifyContent={'space-between'} margin={3.5}>
                         <Flex flexDirection={'column'}>
                             <Text>Nombre: {findName(finder,pacto)}</Text>
                             <Text>Numero: {findNumber(finder, pacto)}</Text>

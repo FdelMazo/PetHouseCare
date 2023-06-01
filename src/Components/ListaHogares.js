@@ -65,8 +65,8 @@ export function ListaHogares() {
 
                 <Heading>Estos cuidadores quieren hacer un pacto contigo</Heading>
                 <Container bgGradient='linear(to-r, red.400,pink.400)' padding='17px' margin='17px' borderRadius='14px'>
-                    {(!pactos.filter((pacto) => !pacto.accepted && pacto.homeownerId === user.id).length) ? <Text color={'white'}>No hay pactos para aceptar</Text>
-                        : pactos.filter((pacto) => !pacto.accepted && pacto.homeownerId === user.id).map((pacto) => {
+                    {(!pactos.filter((pacto) => !pacto.accepted && pacto.caretakerId === user.id).length) ? <Text color={'white'}>No hay pactos para aceptar</Text>
+                        : pactos.filter((pacto) => !pacto.accepted && pacto.caretakerId === user.id).map((pacto) => {
                         return <Flex justifyContent={'space-between'}>
                             <Text color={'white'} fontSize={'25'} fontWeight={'800'}>{findName(pacto)}</Text>
                             <Button color={'white'} backgroundColor={'transparent'} borderWidth={3} onClick={() => {

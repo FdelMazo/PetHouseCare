@@ -30,7 +30,7 @@ const FIXTURES = {
       email: "tizziana@gmail.com",
       phone: "+549112345678565",
       description: "Viajo muy seguido y necesito gente que cuide mi casa y gato, pelusa.",
-      "home": { "location": "Argentina, Buenos Aires", pets: "Cats" }
+      "home": { "location": "Argentina, Buenos Aires", pets: "Gato" }
     },
     {
 
@@ -43,7 +43,7 @@ const FIXTURES = {
       email: "lulilaguna@gmail.com",
       phone: "+549112345678569",
       description: "Viajo en septiembre, tengo una gata muy autosuficiente pero necesita que al alimenten.",
-      "home": { "location": "Argentina, Mendoza", pets: "Cats" }
+      "home": { "location": "Argentina, Mendoza", pets: "Gata" }
     },
     {
       id:1_3,
@@ -55,7 +55,7 @@ const FIXTURES = {
       email: "camilamosteiro@gmail.com",
       phone: "+549112345678566",
       description: "Tengo que viajar por trabajo 2 meses, tengo un golden muy tranquilo.",
-      "home": { "location": "Argentina, Buenos Aires", pets: "Dogs" }
+      "home": { "location": "Argentina, Buenos Aires", pets: "Perro - Golden" }
     },
     {
       id:1_4,
@@ -67,7 +67,7 @@ const FIXTURES = {
       email: "marianoperez@gmail.com",
       phone: "+549112345678545",
       description: "Tengo programado un viaje de una semana en julio, tengo 3 perros chiquitos.",
-      "home": { "location": "Uruguay, Colonia", pets: "Dogs" }
+      "home": { "location": "Uruguay, Colonia", pets: "Tres caniches" }
     },
     {
       id:1_5,
@@ -78,8 +78,8 @@ const FIXTURES = {
       lastName: "Carmelo",
       email: "oscarcarmelo@gmail.com",
       phone: "+549112345678356",
-      description: "Viajo todos los veranos con mi familia, y necesitamos quien cuide de nuestros perros. Tenemos un dalmata y dos doggos",
-      "home": { "location": "Argentina, Bariloche", pets: "Dogs" }
+      description: "Viajo todos los veranos con mi familia, y necesitamos quien cuide de nuestros perros. Tenemos un dalmata y dos dogos",
+      "home": { "location": "Argentina, Bariloche", pets: "Un Dalmata y dos dogos." }
     },
     {
       id:1_6,
@@ -90,8 +90,9 @@ const FIXTURES = {
       lastName: "Marino",
       email: "olgamarino@gmail.com",
       phone: "+549112345678358",
-      description: "Tengo un viaje con mis amigos, los jubilados, esta primavera. Tengo una casa grande, en el centro de Entre Rios, cerca de las termas. Tengo 4 gatitos y dos loros",
-      "home": { "location": "Argentina, Entre Rios", pets: "Cats and parrots" }
+      description: "Tengo un viaje con mis amigos, los jubilados, esta primavera. Tengo una casa grande, en el centro de " +
+          "Entre Rios, cerca de las termas. Tengo 4 gatitos y dos loros",
+      "home": { "location": "Argentina, Entre Rios", pets: "4 gatos y dos loros" }
     },
     {
       id:1_7,
@@ -103,7 +104,7 @@ const FIXTURES = {
       email: "martamurillo@gmail.com",
       phone: "+549112345678312",
       description: "Me voy varias veces al año. Estoy cerca de las Cataratas del Iguazú. Soy dueña de una tortuga y un beagle. Muy amigables ambos!! ",
-      "home": { "location": "Argentina, Misiones", pets: "Dogs and tortoise" }
+      "home": { "location": "Argentina, Misiones", pets: "Un perro, beagle y una tortuguita de 100 años" }
     },
     {
       id:1_8,
@@ -115,7 +116,7 @@ const FIXTURES = {
       email: "patriciomoore@gmail.com",
       phone: "+549112345678333",
       description: "Me voy dos semanas de viaje, necesito ayuda de alguien con experiencia para cuidar a mi pato y mis conejos. Tengo un campito.",
-      "home": { "location": "Argentina, Buenos Aires", pets: "Ducks and rabbits" }
+      "home": { "location": "Argentina, Buenos Aires", pets: "Un pato y dos conejos" }
     },
     {
       id:1_9,
@@ -126,8 +127,9 @@ const FIXTURES = {
       lastName: "Reta",
       email: "lauritareta@gmail.com",
       phone: "+549112345678313",
-      description: "Hola! Tengo un viaje programado para agosto, acompaño a mi hijo de viaje de egresados, y mi perro y mi gato quedan sin cuidado alguno.",
-      "home": { "location": "Argentina, Salta", pets: "Dogs and cats" }
+      description: "Hola! Tengo un viaje programado para agosto, acompaño a mi hijo de viaje de egresados, " +
+          "y mi perro y mi gato quedan sin cuidado alguno.",
+      "home": { "location": "Argentina, Salta", pets: "Un perro, bulldog frnaces, y un gato." }
     },
     {
       id:1_10,
@@ -139,7 +141,7 @@ const FIXTURES = {
       email: "sol_s@gmail.com",
       phone: "+549112345444313",
       description: "Necesito cuidador/a para mi gata. Tiempo: 2 semanas, en noviembre",
-      "home": { "location": "Argentina, Bariloche", pets: "Cats" }
+      "home": { "location": "Argentina, Bariloche", pets: "Una gatita tricolor." }
     },
   ],
   caretakers: [
@@ -367,6 +369,7 @@ const FIXTURES = {
     },
   ]
 }
+
 
 db.on('populate', async () => {
   await db.users.bulkAdd(FIXTURES.homeowners);
