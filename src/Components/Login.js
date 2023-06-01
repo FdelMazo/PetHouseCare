@@ -11,6 +11,17 @@ import {
     Tooltip,
     useColorModeValue,
     Icon,
+    Checkbox,
+    Link,
+    useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -21,10 +32,12 @@ import { ROUTES } from '../routes';
 import { Navbar } from './Navbar';
 
 export const Login = () => {
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [conditionsAccepted, setConditionsAccepted] = useState(false);
 
     async function register(role) {
         if (!username) {
@@ -33,6 +46,10 @@ export const Login = () => {
         }
         if (!password) {
             setError('La contraseña es obligatoria');
+            return;
+        }
+        if (!conditionsAccepted) {
+            setError('Tienes que aceptar los términos y condiciones');
             return;
         }
         if (await db.users.where('username').equalsIgnoreCase(username).first()) {
@@ -160,7 +177,11 @@ export const Login = () => {
                                         color: 'gray.500',
                                     }}
                                 />
-
+                                <Checkbox colorScheme={'pink'} checked={conditionsAccepted} onClick={(event) => setConditionsAccepted((prev) => !prev)}>
+                                    Acepto los <Link color='teal.500' onClick={onOpen}>
+                                    términos y condiciones
+                                </Link>
+                                </Checkbox>
                                 <ButtonGroup
                                     justifyContent={'center'}
                                     isAttached
@@ -235,6 +256,51 @@ export const Login = () => {
                     </Stack>
                 </Container>
             </Box >
+            <Modal isOpen={isOpen} onClose={onClose} >
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Términos y cóndiciones</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Accordion>
+                            <AccordionItem>
+                                <h2>
+                                    <AccordionButton>
+                                        <Box flex='1' textAlign="left">
+                                            <b>Condición 1</b>
+                                        </Box>
+                                        <AccordionIcon/>
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4}>
+                                    PetHouseCare S.R.L. NO será responsable de los daños que se puedan ocasionar
+                                    a su casa y/o a sus mascotas.
+                                </AccordionPanel>
+                            </AccordionItem>
+                            <AccordionItem>
+                                <h2>
+                                    <AccordionButton>
+                                        <Box flex='1' textAlign="left">
+                                            <b>Condición 2</b>
+                                        </Box>
+                                        <AccordionIcon/>
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel pb={4}>
+                                    PetHouseCare S.R.L. NO será responsable por los daños que se puedan ocasionar
+                                    a usted debido al ataque de una mascota.
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='pink' mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 }
