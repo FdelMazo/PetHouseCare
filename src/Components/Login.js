@@ -177,7 +177,7 @@ export const Login = () => {
                                         color: 'gray.500',
                                     }}
                                 />
-                                <Checkbox colorScheme={'pink'} checked={conditionsAccepted} onClick={(event) => setConditionsAccepted((prev) => !prev)}>
+                                <Checkbox colorScheme={'pink'} checked={conditionsAccepted} onChange={(event) => setConditionsAccepted((prev) => !prev)}>
                                     Acepto los <Link color='teal.500' onClick={onOpen}>
                                     términos y condiciones
                                 </Link>
