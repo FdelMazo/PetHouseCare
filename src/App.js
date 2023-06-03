@@ -10,6 +10,7 @@ import { Home } from './Components/Home';
 import { ROUTES } from './routes';
 import { Hogar } from './Components/Hogar';
 import { MisPactos } from './MisPactos';
+import { Foro } from './Components/Foro';
 
 const router = createHashRouter([
   {
@@ -44,7 +45,10 @@ const router = createHashRouter([
     path: ROUTES.MIS_PACTOS,
     element: <MisPactos />,
   },
-
+  {
+    path: ROUTES.FORO,
+    element: <Foro />,
+  },
 ])
 
 function App() {

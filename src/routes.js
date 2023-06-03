@@ -6,7 +6,8 @@ export const ROUTES = {
     CARETAKER: '/caretakers/:id',
     HOMEOWNER: '/homeowners/:id',
     PROFILE: '/profile',
-    MIS_PACTOS: '/pacts'
+    MIS_PACTOS: '/pacts',
+    FORO: '/forum'
 }
 
 export const ROUTE_TITLES = {
@@ -15,6 +16,7 @@ export const ROUTE_TITLES = {
   [ROUTES.CARETAKERS]: "Cuidadores",
   [ROUTES.PROFILE]: "Mi Perfil",
   [ROUTES.MIS_PACTOS]: "Mis pactos",
+  [ROUTES.FORO]: "Foro",
 }
 
 export const DUEÑO_ROUTES = [
@@ -22,14 +24,16 @@ export const DUEÑO_ROUTES = [
   ROUTES.CARETAKERS,
   ROUTES.CARETAKER,
   ROUTES.PROFILE,
-  ROUTES.MIS_PACTOS
+  ROUTES.MIS_PACTOS,
+  ROUTES.FORO
 ]
 
 export const CUIDADOR_ROUTES = [
     ROUTES.HOME,
     ROUTES.HOMEOWNERS,
     ROUTES.PROFILE,
-    ROUTES.MIS_PACTOS
+    ROUTES.MIS_PACTOS,
+    ROUTES.FORO
 ]
 
 export const PUBLIC_ROUTES = [
