@@ -54,6 +54,7 @@ export const Foro = () => {
             width="500px"
             placeholder='Comentario'
             background="#f8fcff"
+            value={myComment}
             onChange={(event) => setMyComment(event.target.value)}
           />
           <Button marginLeft="8px" isDisabled={!myComment.trim()} onClick={async () => {
