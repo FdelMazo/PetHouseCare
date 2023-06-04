@@ -8,6 +8,7 @@ import { parseISO } from 'date-fns';
 import { IoIosAirplane, IoIosArrowDroprightCircle, IoMdPin } from 'react-icons/io';
 import ReactStars from 'react-stars';
 import { SmallCloseIcon } from '@chakra-ui/icons';
+import AdCard from './Ad';
 
 export function ListaCuidadores() {
   const [cuidadores, setCuidadores] = useState([]);
@@ -37,6 +38,18 @@ export function ListaCuidadores() {
       return cuidador.nextTrip.from <= parseISO(endingDate) && cuidador.nextTrip.to >= parseISO(startingDate);
     })
   }
+
+  if (!result.includes("AD")) {
+    let ads = 0
+    for (let i = 3; i < result.length; i += 4) {
+      if (ads === 3) {
+        break
+      }
+      result.splice(i, 0, "AD");
+      ads += 1
+    }
+  }
+
 
   return (
     <>
@@ -79,7 +92,7 @@ export function ListaCuidadores() {
           <Text mt={4} fontSize="xl" color="gray.500">No se encontraron cuidadores</Text>
         }
         {result.map((cuidador) => {
-          return <TarjetaCuidador ratingFilter={ratingSearch} cuidador={cuidador} key={cuidador.username + cuidador.password} />
+          return cuidador === "AD" ? <AdCard /> : <TarjetaCuidador ratingFilter={ratingSearch} cuidador={cuidador} key={cuidador.username + cuidador.password} />
         })}
       </Container>
     </>

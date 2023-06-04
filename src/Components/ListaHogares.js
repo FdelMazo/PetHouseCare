@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactStars from 'react-stars';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { FaHandshake } from 'react-icons/fa';
+import AdCard from './Ad';
 
 export function ListaHogares() {
     const [homeowners, sethomeowners] = useState([]);
@@ -50,6 +51,16 @@ export function ListaHogares() {
         );
     }
 
+    if (!result.includes("AD")) {
+        let ads = 0
+        for (let i = 3; i < result.length; i += 4) {
+            if (ads === 3) {
+                break
+            }
+            result.splice(i, 0, "AD");
+            ads += 1
+        }
+    }
 
     function findHomeOwner(pacto) {
         return homeowners.find((homeowner) => homeowner.id === pacto.homeownerId);
@@ -111,7 +122,7 @@ export function ListaHogares() {
                 </VStack>
 
                 {result.map((homeowner) => {
-                    return <TarjetaHogar ratingFilter={ratingSearch} homeowner={homeowner} key={homeowner.username + homeowner.password} />;
+                    return homeowner === "AD" ? <AdCard /> : <TarjetaHogar ratingFilter={ratingSearch} homeowner={homeowner} key={homeowner.username + homeowner.password} />;
                 })}
             </Container>
         </>
