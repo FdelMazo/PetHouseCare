@@ -370,6 +370,18 @@ const FIXTURES = {
       rating: 4,
       text: "Todo bien, pero me hubiera gustado que me mande mas fotos de mi gatita."
     },
+  ],
+
+  // FORO
+  forumComments: [
+    {
+      "comment": "No se olviden de cambiarle el agua a los gatitos todos los dias!",
+      "name": "Sergio M"
+    },
+    {
+      "comment": "Prueben hacerle juegos interactivos a sus perritos",
+      "name": "Pedro Campos"
+    },
   ]
 }
 
@@ -380,4 +392,5 @@ db.on('populate', async () => {
   await db.pakts.bulkAdd(FIXTURES.pakts);
   await db.caretakerRatings.bulkAdd(FIXTURES.caretakerRating);
   await db.homeownerRatings.bulkAdd(FIXTURES.homeownersRating);
+  await db.forumComments.bulkAdd(FIXTURES.forumComments);
 });

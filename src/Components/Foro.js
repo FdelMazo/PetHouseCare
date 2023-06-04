@@ -12,7 +12,7 @@ export const Foro = () => {
 
   const submitComment = async () => {
     await db.forumComments.add(
-      { comment: myComment, name: `${user.firstName} ${user.lastName}` },
+      { comment: myComment, name: user.firstName ? `${user.firstName} ${user.lastName}` : `@${user.username}` },
     );
   };
 
