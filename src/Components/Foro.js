@@ -54,6 +54,8 @@ export const Foro = () => {
             width="500px"
             placeholder='Comentario'
             background="#f8fcff"
+            color="lightslategray"
+            _placeholder={{ color: "lightslategray" }}
             value={myComment}
             onChange={(event) => setMyComment(event.target.value)}
           />
@@ -69,6 +71,7 @@ export const Foro = () => {
             width="600px"
             border="solid 1px lightgrey"
             background="#f8fcff"
+            color="lightslategray"
             borderRadius="5px"
             marginBottom="15px"
             padding="5px"

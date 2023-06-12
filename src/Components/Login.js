@@ -177,10 +177,16 @@ export const Login = () => {
                                         color: 'gray.500',
                                     }}
                                 />
-                                <Checkbox colorScheme={'pink'} checked={conditionsAccepted} onChange={(event) => setConditionsAccepted((prev) => !prev)}>
+                                <Checkbox
+                                    border="lightslategray"
+                                    colorScheme={'pink'}
+                                    checked={conditionsAccepted}
+                                    onChange={(event) => setConditionsAccepted((prev) => !prev)}>
+                                    <Text color={useColorModeValue('var(--chakra-colors-chakra-body-text)', 'gray.800')}>
                                     Acepto los <Link color='teal.500' onClick={onOpen}>
-                                    términos y condiciones
+                                            términos y condiciones
                                 </Link>
+                                    </Text>
                                 </Checkbox>
                                 <ButtonGroup
                                     justifyContent={'center'}
@@ -199,6 +205,7 @@ export const Login = () => {
                                             fontSize="sm"
                                             h={14}
                                             noOfLines={2}
+                                            border="1px dashed lightslategray"
                                             onClick={async () => {
                                                 await register(ROLES.DUEÑO);
                                             }}
@@ -207,7 +214,6 @@ export const Login = () => {
                                                 boxShadow: 'xl',
                                             }}
                                             leftIcon={<Icon as={IoIosHome} boxSize={18} />}
-                                            borderRight='1px dashed lightslategray'
                                         >
                                             <Text>Soy dueño de hogar</Text>
                                         </Button>
@@ -222,6 +228,7 @@ export const Login = () => {
                                             w={"22ch"}
                                             h={14}
                                             noOfLines={2}
+                                            border="1px dashed lightslategray"
                                             fontSize="sm"
                                             onClick={async () => {
                                                 await register(ROLES.CUIDADOR);
@@ -230,7 +237,6 @@ export const Login = () => {
                                                 bgGradient: 'linear(to-r, red.400,pink.400)',
                                                 boxShadow: 'xl',
                                             }}
-                                            borderLeft='1px dashed lightslategray'
                                             rightIcon={<Icon as={IoIosPaw} boxSize={18} />}
                                         >
                                             <Text>Soy cuidador/a</Text>
